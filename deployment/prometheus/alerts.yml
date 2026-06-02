@@ -1,0 +1,32 @@
+groups:
+  - name: fincrime_model_alerts
+    interval: 1m
+    rules:
+      - alert: HighAlertRate
+        expr: |
+          sum(rate(fincrime_alerts_total[5m])) by (layer)
+            / sum(rate(fincrime_predictions_total[5m])) by (layer) > 0.50
+        for: 10m
+        labels: { severity: warning, team: fincrime-ops }
+        annotations:
+          summary: "Alert rate > 50% in {{ $labels.layer }}"
+          description: "Possible model degradation. PSI check + retrain advised."
+
+      - alert: HighInferenceLatency
+        expr: |
+          histogram_quantile(0.95,
+            sum(rate(fincrime_prediction_latency_seconds_bucket[5m])) by (layer, le)
+          ) > 1.0
+        for: 5m
+        labels: { severity: warning, team: fincrime-ops }
+        annotations:
+          summary: "p95 latency > 1s in {{ $labels.layer }}"
+
+      - alert: APIErrorRateHigh
+        expr: |
+          sum(rate(fincrime_api_requests_total{status=~"5.."}[5m]))
+            / sum(rate(fincrime_api_requests_total[5m])) > 0.05
+        for: 5m
+        labels: { severity: critical, team: fincrime-ops }
+        annotations:
+          summary: "API 5xx error rate > 5%"

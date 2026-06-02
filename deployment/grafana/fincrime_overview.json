@@ -1,0 +1,75 @@
+{
+  "title": "FinCrime — Overview",
+  "uid": "fincrime-overview",
+  "schemaVersion": 38,
+  "version": 1,
+  "refresh": "30s",
+  "time": {"from": "now-6h", "to": "now"},
+  "panels": [
+    {
+      "id": 1, "type": "stat", "title": "Predictions per second",
+      "gridPos": {"x": 0, "y": 0, "w": 6, "h": 4},
+      "targets": [{"expr": "sum(rate(fincrime_predictions_total[1m]))", "refId": "A"}]
+    },
+    {
+      "id": 2, "type": "stat", "title": "Alert rate %",
+      "gridPos": {"x": 6, "y": 0, "w": 6, "h": 4},
+      "targets": [{
+        "expr": "100 * sum(rate(fincrime_alerts_total[5m])) / clamp_min(sum(rate(fincrime_predictions_total[5m])), 0.001)",
+        "refId": "A"
+      }],
+      "fieldConfig": {"defaults": {"thresholds": {"steps": [
+        {"color":"green","value":null},{"color":"yellow","value":15},{"color":"red","value":40}
+      ]}}}
+    },
+    {
+      "id": 3, "type": "stat", "title": "p95 inference latency (s)",
+      "gridPos": {"x": 12, "y": 0, "w": 6, "h": 4},
+      "targets": [{
+        "expr": "histogram_quantile(0.95, sum(rate(fincrime_prediction_latency_seconds_bucket[5m])) by (le))",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 4, "type": "stat", "title": "Reports generated 24h",
+      "gridPos": {"x": 18, "y": 0, "w": 6, "h": 4},
+      "targets": [{"expr": "sum(increase(fincrime_reports_total[24h]))", "refId": "A"}]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "Predictions by layer",
+      "gridPos": {"x": 0, "y": 4, "w": 12, "h": 8},
+      "targets": [{
+        "expr": "sum(rate(fincrime_predictions_total[1m])) by (layer)",
+        "legendFormat": "{{layer}}",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 6, "type": "timeseries", "title": "Alerts by severity",
+      "gridPos": {"x": 12, "y": 4, "w": 12, "h": 8},
+      "targets": [{
+        "expr": "sum(rate(fincrime_alerts_total[1m])) by (severity)",
+        "legendFormat": "{{severity}}",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 7, "type": "timeseries", "title": "API request rate",
+      "gridPos": {"x": 0, "y": 12, "w": 12, "h": 8},
+      "targets": [{
+        "expr": "sum(rate(fincrime_api_requests_total[1m])) by (endpoint)",
+        "legendFormat": "{{endpoint}}",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 8, "type": "timeseries", "title": "API p95 latency by endpoint",
+      "gridPos": {"x": 12, "y": 12, "w": 12, "h": 8},
+      "targets": [{
+        "expr": "histogram_quantile(0.95, sum(rate(fincrime_api_request_duration_seconds_bucket[5m])) by (endpoint, le))",
+        "legendFormat": "{{endpoint}}",
+        "refId": "A"
+      }]
+    }
+  ]
+}

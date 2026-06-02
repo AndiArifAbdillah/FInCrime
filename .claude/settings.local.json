@@ -1,0 +1,32 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(& \".venv\\\\Scripts\\\\python.exe\" --version)",
+      "PowerShell(& \".venv\\\\Scripts\\\\python.exe\" -m pip --version)",
+      "PowerShell($env:TMP = \"D:\\\\pip-tmp\"; & \".venv\\\\Scripts\\\\python.exe\" scripts\\\\generate_sample_data.py 2>&1)",
+      "PowerShell($p = \\(Get-Command python -ErrorAction SilentlyContinue\\).Source; Write-Host \"python now -> $p\"; Write-Host \"venv activate exists: $\\(Test-Path '.\\\\.venv\\\\Scripts\\\\Activate.ps1'\\)\"; Write-Host \"ExecutionPolicy CurrentUser: $\\(Get-ExecutionPolicy -Scope CurrentUser\\)\"; Write-Host \"ExecutionPolicy Process: $\\(Get-ExecutionPolicy -Scope Process\\)\")",
+      "PowerShell(Get-PSDrive C | Select-Object @{N='FreeGB';E={[math]::Round\\($_.Free/1GB,2\\)}}, @{N='UsedGB';E={[math]::Round\\($_.Used/1GB,2\\)}}; winget install -e --id Python.Python.3.12 --accept-source-agreements --accept-package-agreements --silent 2>&1 | Select-Object -Last 15)",
+      "Bash(curl -s http://localhost:8000/health)",
+      "Bash(curl -s http://localhost:8000/v1/overview/metrics)",
+      "Bash(python -c \"import sys, json; d=json.load\\(sys.stdin\\); print\\(f'tx_total={d[\\\\\"transactions_total\\\\\"]}, alerts={d[\\\\\"alerts_active\\\\\"]}, entities_total={d[\\\\\"entities_total\\\\\"]}, reports={d[\\\\\"reports_total\\\\\"]}, layer2={d[\\\\\"layer_status\\\\\"][\\\\\"l2\\\\\"]}'\\)\")",
+      "PowerShell($basePath = \"C:\\\\Users\\\\HP\\\\AppData\\\\Roaming\\\\Claude\\\\local-agent-mode-sessions\\\\skills-plugin\\\\4fc248a0-7843-4486-acf6-86d1e4b74da8\\\\601ef69e-87a7-497e-9e9e-5a7f1c99994d\\\\skills\\\\docx\"; if \\(Test-Path \"$basePath\\\\scripts\\\\office\\\\validate.py\"\\) { & python \"$basePath\\\\scripts\\\\office\\\\validate.py\" \"D:\\\\kuliah\\\\BANK INDONESIA\\\\FInCrime\\\\Proposal_Tahap_2_FinCrime_AI.docx\" 2>&1 } else { Write-Host \"Validator script not found, doing manual XML schema check\" })",
+      "Bash(cd /tmp/docx_check && grep -c \"<w:p \" word/document.xml && echo \"--- check paragraphs count ---\" && grep -c \"<w:tbl>\" word/document.xml && echo \"--- check tables count ---\" && grep -c \"<w:pageBreak\" word/document.xml && echo \"--- check page breaks ---\")",
+      "Bash(python proyek_akhir.py)",
+      "WebFetch(domain:drive.google.com)",
+      "WebFetch(domain:drive.usercontent.google.com)",
+      "Read(//c/Users/HP/.claude/projects/D--kuliah-BANK-INDONESIA-FInCrime/84364b76-533a-43c4-8d3a-de79f5261a7e/tool-results/**)",
+      "Bash(grep -oE \"https://docs.google.com[^\\\\\"\\\\\\\\]*\" webfetch-1780071833035-w4doha.bin)",
+      "Bash(python -c ' *)",
+      "Bash(PYTHONIOENCODING=utf-8 python -c ' *)",
+      "Read(//d/kuliah/BANK INDONESIA/Machine Learning Untuk Pemula/BMLP_Your_Name/**)",
+      "Bash(PYTHONIOENCODING=utf-8 '/d/kuliah/BANK INDONESIA/Machine Learning Untuk Pemula/bmlp_env/Scripts/python.exe' -c ' *)",
+      "PowerShell(cd \"D:\\\\kuliah\\\\BANK INDONESIA\\\\FInCrime\"; $f = Get-Item \"Proposal_Tahap_2_FinCrime.docx\"; \"Modified: $\\($f.LastWriteTime\\)  Size: $\\([math]::Round\\($f.Length/1KB,1\\)\\) KB\"; Add-Type -AssemblyName System.IO.Compression.FileSystem; $zip=[System.IO.Compression.ZipFile]::OpenRead\\($f.FullName\\); $entry=$zip.Entries | Where-Object {$_.Name -eq \"document.xml\"}; $sr=New-Object System.IO.StreamReader\\($entry.Open\\(\\)\\); $xml=$sr.ReadToEnd\\(\\); $sr.Close\\(\\); $zip.Dispose\\(\\); foreach\\($term in @\\(\"Privacy Coin Monitor\",\"Prioritas Utama AML Crypto\",\"privacycoin\",\"13 tab\",\"PFAK Bappebti\"\\)\\){ \"{0,-32} -> {1}\" -f $term, \\($xml -match [regex]::Escape\\($term\\)\\) })",
+      "PowerShell(cd \"D:\\\\kuliah\\\\BANK INDONESIA\\\\FInCrime\"; Invoke-Item \"Proposal_Tahap_2_FinCrime.docx\"; \"Membuka Proposal_Tahap_2_FinCrime.docx ...\")",
+      "Bash(ls -1 *.md *.txt)",
+      "Bash(ls -1 docs/)",
+      "Bash(./.venv312/Scripts/python.exe -c ' *)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "WebFetch(domain:www.bi.go.id)"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fincrime-dashboard
+  labels: { app: fincrime, component: dashboard }
+spec:
+  replicas: 1
+  selector: { matchLabels: { app: fincrime, component: dashboard } }
+  template:
+    metadata:
+      labels: { app: fincrime, component: dashboard }
+    spec:
+      containers:
+      - name: dashboard
+        image: fincrime/dashboard:0.1.0
+        ports: [{ containerPort: 8501 }]
+        envFrom:
+        - secretRef: { name: fincrime-secrets }
+        - configMapRef: { name: fincrime-config }
+        resources:
+          requests: { cpu: "200m", memory: "512Mi" }
+          limits:   { cpu: "1",    memory: "2Gi" }
+---
+apiVersion: v1
+kind: Service
+metadata: { name: fincrime-dashboard }
+spec:
+  selector: { app: fincrime, component: dashboard }
+  ports: [{ port: 80, targetPort: 8501 }]
+  type: LoadBalancer

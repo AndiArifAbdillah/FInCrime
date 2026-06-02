@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>LTKM — {{ p.report_id }}</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 30px; }
+  h1 { font-size: 16pt; margin-bottom: 4px; }
+  h2 { font-size: 12pt; border-bottom: 2px solid #c00; padding-bottom: 4px; margin-top: 22px; color: #c00; }
+  .meta { background: #f8f8f8; padding: 10px 14px; border-left: 4px solid #c00; font-size: 10pt; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 9.5pt; }
+  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: #efefef; }
+  .indicator { background: #fff8e1; padding: 6px 10px; margin: 4px 0; border-left: 3px solid #f5a623; }
+  .footer { margin-top: 30px; font-size: 9pt; color: #666; border-top: 1px solid #ddd; padding-top: 8px; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; background: #fdecea; color: #c00; font-weight: bold; font-size: 9pt; }
+</style>
+</head>
+<body>
+<h1>LAPORAN TRANSAKSI KEUANGAN MENCURIGAKAN (LTKM)</h1>
+<div class="meta">
+  <strong>Nomor Laporan:</strong> {{ p.report_id }}<br>
+  <strong>Tanggal Pelaporan:</strong> {{ p.report_date }}<br>
+  <strong>Kode Lembaga:</strong> {{ p.institution_code }} — {{ p.institution_name }}<br>
+  <strong>Dihasilkan oleh:</strong> FinCrime System (otomatis) — {{ generated_at }}
+</div>
+
+<h2>A. Data Subjek Terlapor</h2>
+<table>
+  <tr><th>Nama / Identifier</th><td>{{ p.subject_name }} ({{ p.subject_id }})</td></tr>
+  <tr><th>Tipe Subjek</th><td>{{ p.subject_type }}</td></tr>
+  <tr><th>Negara</th><td>{{ p.subject_country }}</td></tr>
+  <tr><th>Skor Risiko (Layer 0)</th><td><span class="badge">{{ '%.1f' % p.risk_score }} / 100</span></td></tr>
+  <tr><th>Skor Layering (Layer 2)</th><td><span class="badge">{{ '%.4f' % p.layering_score }}</span></td></tr>
+</table>
+
+<h2>B. Ringkasan Kecurigaan</h2>
+<p>{{ p.suspicion_summary }}</p>
+
+<h2>C. Indikator Kecurigaan</h2>
+{% for ind in p.suspicion_indicators %}
+  <div class="indicator">▸ {{ ind }}</div>
+{% else %}
+  <p><em>Tidak ada indikator spesifik tercatat.</em></p>
+{% endfor %}
+
+<h2>D. Daftar Transaksi Terkait</h2>
+{% if p.transactions %}
+<table>
+  <thead>
+    <tr>
+      <th>Tx ID</th><th>Tanggal</th><th>Channel</th>
+      <th>Pengirim</th><th>Penerima</th><th>Jumlah (IDR)</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for t in p.transactions[:50] %}
+    <tr>
+      <td>{{ t.tx_id }}</td>
+      <td>{{ t.timestamp | dt }}</td>
+      <td>{{ t.channel }}</td>
+      <td>{{ t.sender_id }}</td>
+      <td>{{ t.receiver_id }}</td>
+      <td style="text-align:right">{{ t.amount_idr | idr }}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% if p.transactions|length > 50 %}
+  <p><em>+ {{ p.transactions|length - 50 }} transaksi tambahan tidak ditampilkan.</em></p>
+{% endif %}
+{% else %}
+  <p><em>Tidak ada transaksi terlampir.</em></p>
+{% endif %}
+
+<h2>E. Dompet/Akun Terkait (Layer 2 GNN)</h2>
+{% if p.related_wallets %}
+<ul>
+  {% for w in p.related_wallets[:25] %}
+    <li><code>{{ w }}</code></li>
+  {% endfor %}
+</ul>
+{% else %}
+<p><em>Tidak ada dompet terkait teridentifikasi.</em></p>
+{% endif %}
+
+<h2>F. Petugas Pelapor</h2>
+<table>
+  <tr><th>Nama Petugas</th><td>{{ p.officer_name }}</td></tr>
+  <tr><th>ID Petugas</th><td>{{ p.officer_id }}</td></tr>
+</table>
+
+<div class="footer">
+  Laporan ini dihasilkan secara otomatis oleh sistem FinCrime sesuai POJK No.12/2024
+  dan ketentuan PPATK. Validasi akhir tetap menjadi tanggung jawab Petugas Kepatuhan
+  Lembaga Pelapor sebelum disampaikan ke PPATK melalui sistem GRIPS.
+</div>
+</body>
+</html>

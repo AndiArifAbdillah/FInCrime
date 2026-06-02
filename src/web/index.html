@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07090f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="FinCrime">
+<title>FinCrime</title>
+<link rel="manifest" href="/static/manifest.json">
+<link rel="icon" type="image/svg+xml" href="/static/icon-192.svg">
+<link rel="apple-touch-icon" href="/static/icon-192.svg">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--bg2:#0c0f18;--bg3:#111520;--surf:#141825;--surf2:#1a2030;
+  --b1:rgba(82,140,255,.1);--b2:rgba(82,140,255,.18);--b3:rgba(82,140,255,.28);
+  --blue:#4f8fff;--blue2:#7ab0ff;--blue3:#c5daff;
+  --green:#22c55e;--green2:#86efac;--green3:#dcfce7;
+  --amber:#f59e0b;--amber2:#fcd34d;--amber3:#fef3c7;
+  --red:#ef4444;--red2:#fca5a5;--red3:#fee2e2;
+  --purple:#8b5cf6;--purple2:#c4b5fd;--purple3:#ede9fe;
+  --teal:#14b8a6;--teal2:#5eead4;
+  --t1:#e8edf5;--t2:#8892a4;--t3:#404858;--t4:#252d3a;
+  --mono:'IBM Plex Mono',monospace;--sans:'DM Sans',sans-serif;
+  --r:10px;--r2:14px;
+}
+/* LIGHT THEME (toggle via body.light) */
+body.light{
+  --bg:#eef1f7;--bg2:#ffffff;--bg3:#f3f5fa;--surf:#ffffff;--surf2:#eef2f9;
+  --b1:rgba(11,42,71,.10);--b2:rgba(11,42,71,.16);--b3:rgba(11,42,71,.26);
+  --blue:#2563eb;--blue2:#1d4ed8;--blue3:#1e3a8a;
+  --green2:#15803d;--amber2:#b45309;--red2:#dc2626;--purple2:#7c3aed;--teal2:#0f766e;
+  --t1:#0e1726;--t2:#475067;--t3:#7a8499;--t4:#c7cdda;
+}
+body.light .sb-logo svg{stroke:#fff}
+body.light .tbl td{border-bottom-color:rgba(11,42,71,.07)}
+body.light .alert-item{border-bottom-color:rgba(11,42,71,.07)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--t1);font-family:var(--sans);font-size:15px;display:flex}
+
+/* SIDEBAR (expandable: icon + label) */
+.sidebar{width:214px;background:var(--bg2);border-right:1px solid var(--b1);display:flex;flex-direction:column;padding:14px 10px;gap:3px;flex-shrink:0;z-index:10;transition:width .18s ease;overflow-y:auto}
+.sb-head{display:flex;align-items:center;gap:10px;padding:0 6px;margin-bottom:14px;height:32px;flex-shrink:0}
+.sb-logo{width:32px;height:32px;border-radius:8px;background:var(--blue);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sb-logo svg{width:18px;height:18px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
+.sb-brand{font-weight:600;font-size:15px;color:var(--t1);white-space:nowrap}
+.sb-btn{width:100%;height:38px;border-radius:8px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;gap:11px;padding:0 10px;transition:background .15s;position:relative;flex-shrink:0}
+.sb-btn svg{width:17px;height:17px;flex-shrink:0;fill:none;stroke:var(--t2);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:stroke .15s}
+.sb-label{font-size:13px;color:var(--t2);white-space:nowrap;overflow:hidden;transition:color .15s}
+.sb-btn:hover{background:var(--surf)}
+.sb-btn:hover svg{stroke:var(--t1)}
+.sb-btn:hover .sb-label{color:var(--t1)}
+.sb-btn.active{background:rgba(79,143,255,.15)}
+.sb-btn.active svg{stroke:var(--blue2)}
+.sb-btn.active .sb-label{color:var(--blue2);font-weight:500}
+.sb-btn .dot{position:absolute;top:8px;left:27px;width:6px;height:6px;border-radius:50%;background:var(--red);border:1.5px solid var(--bg2)}
+.sb-divider{height:1px;background:var(--b1);margin:6px 8px;flex-shrink:0}
+/* collapsed mode (icon-only) */
+body.nav-collapsed .sidebar{width:56px;align-items:center;padding:14px 0}
+body.nav-collapsed .sb-head{justify-content:center;gap:0}
+body.nav-collapsed .sb-brand,body.nav-collapsed .sb-label{display:none}
+body.nav-collapsed .sb-btn{width:36px;height:36px;justify-content:center;padding:0;gap:0}
+body.nav-collapsed .sb-btn .dot{left:auto;right:6px;top:6px}
+body.nav-collapsed .sb-divider{width:24px;margin:6px 0}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOPBAR */
+.topbar{height:52px;border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 20px;gap:14px;background:var(--bg2);flex-shrink:0}
+.tb-title{font-size:14px;font-weight:600;color:var(--t1)}
+.tb-sub{font-size:11px;color:var(--t3);font-family:var(--mono)}
+.tb-spacer{flex:1}
+.tb-badge{font-family:var(--mono);font-size:10px;padding:3px 8px;border-radius:4px;border:1px solid}
+.tb-live{background:rgba(34,197,94,.1);color:var(--green2);border-color:rgba(34,197,94,.25);display:flex;align-items:center;gap:5px}
+.tb-offline{background:rgba(239,68,68,.1);color:var(--red2);border-color:rgba(239,68,68,.25)}
+.pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.tb-time{font-family:var(--mono);font-size:11px;color:var(--t3)}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:20px}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* GRID / CARDS */
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.metric{background:var(--surf);border:1px solid var(--b1);border-radius:var(--r);padding:14px 16px}
+.metric-label{font-size:12px;color:var(--t3);margin-bottom:6px;font-family:var(--mono);letter-spacing:.3px}
+.metric-val{font-size:24px;font-weight:600;font-family:var(--mono)}
+.metric-sub{font-size:11px;color:var(--t3);margin-top:3px}
+.mv-blue{color:var(--blue2)}
+.mv-red{color:var(--red2)}
+.mv-amber{color:var(--amber2)}
+.mv-green{color:var(--green2)}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.card{background:var(--surf);border:1px solid var(--b1);border-radius:var(--r2);padding:16px}
+.card-title{font-size:12px;font-weight:500;color:var(--t2);margin-bottom:12px;font-family:var(--mono);letter-spacing:.5px;text-transform:uppercase}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;color:var(--t3);font-weight:500;font-family:var(--mono);letter-spacing:.5px;padding:6px 10px;border-bottom:1px solid var(--b1);text-align:left;text-transform:uppercase}
+.tbl td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.03);font-size:13px;color:var(--t2)}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--surf2)}
+.tbl td:first-child{color:var(--t1);font-weight:500}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;padding:2px 8px;border-radius:4px;font-family:var(--mono);font-weight:500}
+.b-red{background:rgba(239,68,68,.12);color:var(--red2);border:1px solid rgba(239,68,68,.2)}
+.b-amber{background:rgba(245,158,11,.12);color:var(--amber2);border:1px solid rgba(245,158,11,.2)}
+.b-green{background:rgba(34,197,94,.12);color:var(--green2);border:1px solid rgba(34,197,94,.2)}
+.b-blue{background:rgba(79,143,255,.12);color:var(--blue2);border:1px solid rgba(79,143,255,.2)}
+.b-gray{background:rgba(255,255,255,.05);color:var(--t3);border:1px solid var(--b1)}
+
+/* ALERT LIST */
+.alert-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.04);cursor:pointer;border-radius:6px;transition:background .1s}
+.alert-item:hover{background:var(--surf2);padding:10px 8px;margin:0 -8px}
+.alert-item:last-child{border-bottom:none}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ad-red{background:var(--red)}
+.ad-amber{background:var(--amber)}
+.ad-blue{background:var(--blue)}
+.alert-body{flex:1}
+.alert-title{font-size:12px;color:var(--t1);font-weight:500}
+.alert-meta{font-size:11px;color:var(--t3);margin-top:2px;font-family:var(--mono)}
+.alert-action{display:flex;gap:6px;margin-top:6px}
+
+/* BUTTONS */
+.btn{font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid var(--b2);background:transparent;color:var(--t2);cursor:pointer;font-family:var(--sans);transition:all .15s}
+.btn:hover{background:var(--surf2);color:var(--t1)}
+.btn-primary{background:rgba(79,143,255,.12);color:var(--blue2);border-color:rgba(79,143,255,.25)}
+.btn-primary:hover{background:rgba(79,143,255,.2)}
+.btn-red{background:rgba(239,68,68,.08);color:var(--red2);border-color:rgba(239,68,68,.2)}
+.btn-danger{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-success{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* SCORE BAR */
+.score-wrap{display:flex;align-items:center;gap:8px}
+.score-bar{flex:1;height:5px;background:var(--b1);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.score-num{font-family:var(--mono);font-size:12px;min-width:28px;text-align:right}
+
+/* SHAP */
+.shap-row{display:flex;align-items:center;gap:10px;padding:5px 0}
+.shap-label{font-size:11px;color:var(--t2);min-width:170px;flex-shrink:0}
+.shap-track{flex:1;height:6px;background:var(--b1);border-radius:3px;overflow:hidden}
+.shap-fill{height:100%;border-radius:3px}
+.shap-val{font-family:var(--mono);font-size:10px;min-width:38px;text-align:right}
+
+/* CANVAS */
+canvas{display:block;width:100%;border-radius:8px}
+
+/* REPORT */
+.report-item{display:flex;align-items:center;gap:12px;padding:12px;border:1px solid var(--b1);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:border-color .15s}
+.report-item:hover{border-color:var(--b2)}
+.report-icon{width:34px;height:34px;border-radius:7px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;font-weight:600;color:#fff;flex-shrink:0}
+.ri-amber{background:var(--amber)}
+.ri-green{background:var(--green)}
+.report-body{flex:1}
+.report-title{font-size:13px;font-weight:500;color:var(--t1)}
+.report-sub{font-size:11px;color:var(--t3);margin-top:2px;font-family:var(--mono)}
+
+/* STATUS LAYER */
+.layer-status{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:var(--r);border:1px solid;margin-bottom:6px;cursor:pointer;transition:border-color .15s}
+.ls-0{background:rgba(79,143,255,.06);border-color:rgba(79,143,255,.2)}
+.ls-1{background:rgba(139,92,246,.06);border-color:rgba(139,92,246,.2)}
+.ls-2{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.25)}
+.ls-3{background:rgba(239,68,68,.06);border-color:rgba(239,68,68,.2)}
+.ls-name{font-size:12px;font-weight:500}
+.ls-0 .ls-name{color:var(--blue2)}
+.ls-1 .ls-name{color:var(--purple2)}
+.ls-2 .ls-name{color:var(--amber2)}
+.ls-3 .ls-name{color:var(--red2)}
+
+/* NODE DETAIL */
+.node-detail{background:var(--surf2);border:1px solid var(--b1);border-radius:var(--r);padding:14px;margin-top:12px}
+.nd-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12px}
+.nd-row:last-child{border-bottom:none}
+.nd-key{color:var(--t3)}
+.nd-val{color:var(--t1);font-family:var(--mono);font-size:11px}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
+
+/* MINI CHART */
+.sparkline{display:flex;align-items:flex-end;gap:2px;height:32px}
+.spark-bar{width:6px;border-radius:2px;background:var(--blue);opacity:.4;transition:opacity .2s}
+.spark-bar:last-child,.spark-bar:nth-last-child(2){opacity:1}
+
+/* LIVE TAG */
+@keyframes liveblink{0%,100%{opacity:1}50%{opacity:.3}}
+.live-tag{font-family:var(--mono);font-size:9px;padding:2px 6px;border-radius:3px;background:rgba(34,197,94,.12);color:var(--green2);border:1px solid rgba(34,197,94,.2);animation:liveblink 2s infinite}
+
+/* WALLET INPUT */
+.wallet-input{display:flex;gap:8px;margin-bottom:16px}
+.wallet-input input{flex:1;background:var(--bg3);border:1px solid var(--b2);border-radius:7px;padding:8px 12px;color:var(--t1);font-family:var(--mono);font-size:12px;outline:none}
+.wallet-input input:focus{border-color:var(--blue);background:var(--surf)}
+.wallet-input input::placeholder{color:var(--t3)}
+
+.chip{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:6px;border:1px solid var(--b2);background:var(--bg3);color:var(--t2);cursor:pointer;transition:all .15s}
+.chip:hover{background:var(--surf2);color:var(--t1);border-color:var(--b3)}
+
+.loading{text-align:center;padding:20px;color:var(--t3);font-family:var(--mono);font-size:11px}
+.loading::after{content:'...';animation:dots 1.5s steps(4,end) infinite}
+@keyframes dots{0%,20%{content:''}40%{content:'.'}60%{content:'..'}80%,100%{content:'...'}}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sb-head">
+    <div class="sb-logo">
+      <svg viewBox="0 0 18 18"><polygon points="9,2 16,6 16,12 9,16 2,12 2,6"/><line x1="9" y1="2" x2="9" y2="16"/><line x1="2" y1="6" x2="16" y2="12"/><line x1="2" y1="12" x2="16" y2="6"/></svg>
+    </div>
+    <span class="sb-brand">FinCrime</span>
+  </div>
+  <button class="sb-btn active" id="nb-0" onclick="nav(0)" title="Overview">
+    <svg viewBox="0 0 16 16"><rect x="1" y="1" width="6" height="6" rx="1.5"/><rect x="9" y="1" width="6" height="6" rx="1.5"/><rect x="1" y="9" width="6" height="6" rx="1.5"/><rect x="9" y="9" width="6" height="6" rx="1.5"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-1" onclick="nav(1)" title="Risk Scoring">
+    <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5"/><path d="M8 4v4l3 2"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-2" onclick="nav(2)" title="Fraud Detection">
+    <svg viewBox="0 0 16 16" class="dot"><path d="M8 1L2 4v4c0 3.3 2.6 6.1 6 7 3.4-.9 6-3.7 6-7V4L8 1z"/><line x1="8" y1="5" x2="8" y2="9"/><circle cx="8" cy="11.5" r=".8" fill="currentColor" stroke="none"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-3" onclick="nav(3)" title="Graph Tracing">
+    <svg viewBox="0 0 16 16"><circle cx="3" cy="8" r="2"/><circle cx="13" cy="4" r="2"/><circle cx="13" cy="12" r="2"/><line x1="5" y1="7.5" x2="11" y2="4.5"/><line x1="5" y1="8.5" x2="11" y2="11.5"/></svg>
+  </button>
+  <div class="sb-divider"></div>
+  <button class="sb-btn" id="nb-4" onclick="nav(4)" title="Laporan APU/PPT">
+    <svg viewBox="0 0 16 16"><rect x="3" y="1" width="10" height="14" rx="2"/><line x1="6" y1="5" x2="10" y2="5"/><line x1="6" y1="8" x2="10" y2="8"/><line x1="6" y1="11" x2="8" y2="11"/></svg>
+  </button>
+  <div class="sb-divider"></div>
+  <button class="sb-btn" id="nb-5" onclick="nav(5)" title="Live Trace">
+    <svg viewBox="0 0 16 16"><circle cx="7" cy="7" r="5"/><line x1="11" y1="11" x2="14.5" y2="14.5"/></svg>
+    <span class="dot"></span>
+  </button>
+  <button class="sb-btn" id="nb-6" onclick="nav(6)" title="Cases">
+    <svg viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="11" rx="1.5"/><line x1="5" y1="6" x2="11" y2="6"/><line x1="5" y1="9" x2="11" y2="9"/><line x1="5" y1="12" x2="8" y2="12"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-7" onclick="nav(7)" title="Screening (DTTOT/News)">
+    <svg viewBox="0 0 16 16"><path d="M8 1L2 4v4c0 3 2 5 6 7 4-2 6-4 6-7V4L8 1z"/><path d="M5 8l2 2 4-4"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-8" onclick="nav(8)" title="Private Sector AML">
+    <svg viewBox="0 0 16 16"><path d="M2 14V7l6-4 6 4v7"/><rect x="6" y="9" width="4" height="5"/><line x1="2" y1="14" x2="14" y2="14"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-9" onclick="nav(9)" title="Multi-chain Crypto">
+    <svg viewBox="0 0 16 16"><circle cx="4" cy="4" r="2"/><circle cx="12" cy="4" r="2"/><circle cx="8" cy="12" r="2"/><line x1="4" y1="6" x2="8" y2="10"/><line x1="12" y1="6" x2="8" y2="10"/><line x1="4" y1="4" x2="12" y2="4"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-10" onclick="nav(10)" title="Model Monitoring">
+    <svg viewBox="0 0 16 16"><polyline points="1,12 5,7 8,9 14,3"/><line x1="1" y1="15" x2="15" y2="15"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-11" onclick="nav(11)" title="Investigation Timeline">
+    <svg viewBox="0 0 16 16"><line x1="2" y1="8" x2="14" y2="8"/><circle cx="4" cy="8" r="1.5"/><circle cx="8" cy="8" r="2"/><circle cx="12" cy="8" r="1.5"/></svg>
+  </button>
+  <button class="sb-btn" id="nb-12" onclick="nav(12)" title="Privacy Coin Monitor">
+    <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.5"/><path d="M8 4.5v7M6 6.5h3a1.5 1.5 0 0 1 0 3H6"/></svg>
+  </button>
+</div>
+
+<!-- Toast container for WebSocket alerts -->
+<div id="toasts" style="position:fixed;bottom:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;max-width:340px"></div>
+
+<!-- COMMAND PALETTE (Cmd+K / Ctrl+K) -->
+<div id="palette" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:10000;align-items:flex-start;justify-content:center;padding-top:14vh">
+  <div style="width:min(560px,92vw);background:var(--surf);border:1px solid var(--b2);border-radius:14px;box-shadow:0 24px 64px rgba(0,0,0,.6);overflow:hidden">
+    <input id="palette-input" placeholder="Type a command or search... (e.g., 'cases', 'trace 0x...', 'risk PT')"
+      style="width:100%;border:none;background:var(--bg3);padding:18px 22px;color:var(--t1);font-family:var(--sans);font-size:14px;outline:none;border-bottom:1px solid var(--b1)">
+    <div id="palette-results" style="max-height:60vh;overflow-y:auto;padding:8px 0"></div>
+    <div style="display:flex;justify-content:space-between;padding:8px 16px;border-top:1px solid var(--b1);font-size:10px;color:var(--t3);font-family:var(--mono)">
+      <span><kbd style="background:var(--bg3);padding:2px 6px;border-radius:3px">↑↓</kbd> navigate · <kbd style="background:var(--bg3);padding:2px 6px;border-radius:3px">↵</kbd> select · <kbd style="background:var(--bg3);padding:2px 6px;border-radius:3px">esc</kbd> close</span>
+      <span>⌘K to open anywhere</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <button class="btn" onclick="toggleNav()" title="Sembunyikan / tampilkan label menu" style="padding:6px 9px;font-size:15px;line-height:1">☰</button>
+    <div>
+      <div class="tb-title" id="tb-title">Overview</div>
+      <div class="tb-sub" id="tb-sub">FinCrime · Dashboard</div>
+    </div>
+    <div class="tb-spacer"></div>
+    <span class="tb-badge" id="api-status">
+      <div class="pulse"></div>Connecting
+    </span>
+    <button class="btn" onclick="openPalette()" title="Cmd/Ctrl + K" style="padding:4px 10px;font-family:var(--mono);font-size:10px">
+      ⌘ K
+    </button>
+    <button class="btn" onclick="toggleLang()" title="Switch language" style="padding:4px 10px;font-family:var(--mono);font-size:11px" id="lang-toggle">
+      ID
+    </button>
+    <button class="btn" onclick="toggleTheme()" title="Mode terang / gelap" id="theme-toggle" style="padding:4px 9px;font-size:14px;line-height:1">🌙</button>
+    <span class="tb-time" id="clock">00:00:00</span>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- PAGE 0: OVERVIEW -->
+    <div class="page active" id="p-0">
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Transaksi hari ini</div><div class="metric-val mv-blue" id="m-tx">—</div><div class="metric-sub" id="m-tx-sub">Memuat...</div></div>
+        <div class="metric"><div class="metric-label">Alert fraud aktif</div><div class="metric-val mv-red" id="m-alerts">—</div><div class="metric-sub" id="m-alerts-sub">—</div></div>
+        <div class="metric"><div class="metric-label">Entitas high-risk</div><div class="metric-val mv-amber" id="m-highrisk">—</div><div class="metric-sub" id="m-highrisk-sub">—</div></div>
+        <div class="metric"><div class="metric-label">Laporan APU/PPT</div><div class="metric-val mv-green" id="m-reports">—</div><div class="metric-sub" id="m-reports-sub">—</div></div>
+      </div>
+      <div class="row2">
+        <div class="card">
+          <div class="card-title">Status layer</div>
+          <div class="layer-status ls-0" onclick="nav(1)">
+            <span class="ls-name">Layer 0 — Risk Scoring</span>
+            <span class="badge b-green" id="status-l0">Memuat</span>
+          </div>
+          <div class="layer-status ls-1" onclick="nav(2)">
+            <span class="ls-name">Layer 1 — Fraud Detection</span>
+            <span class="badge b-green" id="status-l1">Memuat</span>
+          </div>
+          <div class="layer-status ls-2" onclick="nav(3)">
+            <span class="ls-name">Layer 2 — Graph Tracing</span>
+            <span class="badge b-amber" id="status-l2">Memuat</span>
+          </div>
+          <div class="layer-status ls-3" onclick="nav(4)">
+            <span class="ls-name">Layer 3 — Laporan</span>
+            <span class="badge b-blue" id="status-l3">Memuat</span>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title">Alert terbaru</div>
+          <div id="recent-alerts"><div class="loading">Memuat alert</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Volume transaksi 7 hari terakhir</div>
+        <canvas id="chart-overview" height="80"></canvas>
+      </div>
+    </div>
+
+    <!-- PAGE 1: RISK SCORING -->
+    <div class="page" id="p-1">
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Entitas diprofil</div><div class="metric-val mv-blue" id="rs-total">—</div><div class="metric-sub">update tiap 15 mnt</div></div>
+        <div class="metric"><div class="metric-label">High risk (>70)</div><div class="metric-val mv-red" id="rs-high">—</div></div>
+        <div class="metric"><div class="metric-label">Medium risk (40–70)</div><div class="metric-val mv-amber" id="rs-mid">—</div></div>
+        <div class="metric"><div class="metric-label">Low risk (<40)</div><div class="metric-val mv-green" id="rs-low">—</div></div>
+      </div>
+      <div class="row2">
+        <div class="card" style="grid-column:1/-1">
+          <div class="card-title">Daftar entitas — sorted by risk score (real-time XGBoost)</div>
+          <table class="tbl">
+            <thead><tr><th>Entitas</th><th>Tipe</th><th>Negara</th><th>Risk Score</th><th>Status</th><th>Aksi</th></tr></thead>
+            <tbody id="entity-tbody"><tr><td colspan="6"><div class="loading">Memuat entitas dari API</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="card" id="shap-card" style="display:none">
+        <div class="card-title" id="shap-title">SHAP Explainability</div>
+        <div id="shap-body"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 2: FRAUD DETECTION -->
+    <div class="page" id="p-2">
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Tx dimonitor</div><div class="metric-val mv-blue" id="fd-monitored">—</div><div class="metric-sub"><span class="live-tag">real-time</span></div></div>
+        <div class="metric"><div class="metric-label">Anomali terdeteksi</div><div class="metric-val mv-red" id="fd-anomalies">—</div></div>
+        <div class="metric"><div class="metric-label">Akurasi model</div><div class="metric-val mv-green">target 94%+</div><div class="metric-sub">IsolationForest + AE</div></div>
+        <div class="metric"><div class="metric-label">False positive</div><div class="metric-val mv-amber">1.3%</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+          <span>Alert aktif</span>
+          <span class="live-tag">live feed</span>
+        </div>
+        <div id="fraud-alerts"><div class="loading">Memuat fraud detection</div></div>
+      </div>
+    </div>
+
+    <!-- PAGE 3: GRAPH TRACING -->
+    <div class="page" id="p-3">
+      <div class="wallet-input">
+        <input type="text" id="wallet-input" placeholder="Masukkan wallet ID... contoh: WALLET_0x000000000002" value="WALLET_0x000000000002">
+        <button class="btn btn-primary" onclick="traceWallet()">Trace Jaringan →</button>
+        <button class="btn" onclick="resetGraph()">Reset</button>
+      </div>
+      <div class="row2">
+        <div class="card" style="grid-column:1/2">
+          <div class="card-title" style="display:flex;align-items:center;justify-content:space-between">
+            <span>Peta jaringan transaksi</span>
+            <span class="badge b-amber" id="case-id">Kasus #—</span>
+          </div>
+          <canvas id="graph-canvas" height="280"></canvas>
+          <div style="display:flex;gap:14px;margin-top:10px;flex-wrap:wrap">
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)"><span style="width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block"></span>Fraud (GNN &gt; 0.7)</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)"><span style="width:8px;height:8px;border-radius:50%;background:var(--amber);display:inline-block"></span>Mencurigakan (0.4–0.7)</span>
+            <span style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--t3)"><span style="width:8px;height:8px;border-radius:50%;background:var(--t3);display:inline-block"></span>Normal (&lt;0.4)</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div class="card">
+            <div class="card-title">Detail node terpilih</div>
+            <div class="node-detail" id="node-detail">
+              <div class="loading">Klik "Trace Jaringan" untuk memulai</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Pola terdeteksi GNN</div>
+            <div id="gnn-patterns"></div>
+            <button class="btn btn-danger" style="width:100%;margin-top:8px" onclick="generateLtkm()">Buat Laporan LTKM →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 4: LAPORAN -->
+    <div class="page" id="p-4">
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Total laporan</div><div class="metric-val mv-blue" id="r-total">—</div></div>
+        <div class="metric"><div class="metric-label">LTKM</div><div class="metric-val mv-green" id="r-ltkm">—</div></div>
+        <div class="metric"><div class="metric-label">LTKT</div><div class="metric-val mv-amber" id="r-ltkt">—</div></div>
+        <div class="metric"><div class="metric-label">Tersedia (HTML+JSON)</div><div class="metric-val mv-blue" id="r-formats">—</div></div>
+      </div>
+      <div class="row2">
+        <div class="card">
+          <div class="card-title">Daftar laporan LTKM / LTKT</div>
+          <div id="reports-list"><div class="loading">Memuat daftar laporan</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title" id="preview-title">Preview — pilih laporan</div>
+          <div id="report-preview" style="background:var(--bg3);border:1px solid var(--b1);border-radius:8px;padding:16px;font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.8;min-height:400px;max-height:600px;overflow:auto">
+            <em>Klik laporan di sebelah kiri untuk preview.</em>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 6: CASES -->
+    <div class="page" id="p-6">
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Total Cases</div><div class="metric-val mv-blue" id="cs-total">—</div></div>
+        <div class="metric"><div class="metric-label">Open</div><div class="metric-val mv-amber" id="cs-open">—</div></div>
+        <div class="metric"><div class="metric-label">Escalated</div><div class="metric-val mv-red" id="cs-escalated">—</div></div>
+        <div class="metric"><div class="metric-label">Closed</div><div class="metric-val mv-green" id="cs-closed">—</div></div>
+      </div>
+      <div class="row2">
+        <div class="card">
+          <div class="card-title" style="display:flex;justify-content:space-between;align-items:center">
+            <span>Investigation Cases</span>
+            <button class="btn btn-primary" onclick="newCaseDialog()">+ Buat Case</button>
+          </div>
+          <div id="cases-list"><div class="loading">Memuat cases</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title" id="case-detail-title">Pilih case di kiri untuk lihat detail</div>
+          <div id="case-detail"><div class="loading">—</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 7: SCREENING -->
+    <div class="page" id="p-7">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">DTTOT / UN Sanctions + Negative News Screening</div>
+        <div style="font-size:12px;color:var(--t3);margin-bottom:12px">
+          Cek satu nama terhadap UN Consolidated List, DTTOT Indonesia, dan scrape negative news
+          dari Kompas/Detik/Tempo/Antara/CNN ID.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="screen-input" type="text" placeholder="Nama / entitas... contoh: Jamaah Islamiyah, atau PT XYZ"
+            style="flex:1;min-width:240px;background:var(--bg3);border:1px solid var(--b2);border-radius:7px;padding:9px 13px;color:var(--t1);font-family:var(--sans);font-size:12px;outline:none">
+          <button class="btn btn-primary" style="padding:9px 18px" onclick="runScreening()">Screen →</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+          <button class="chip" onclick="quickScreen('Jamaah Islamiyah')">DTTOT example</button>
+          <button class="chip" onclick="quickScreen('korupsi')">Negative news</button>
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="card">
+          <div class="card-title">DTTOT / UN Sanctions Match</div>
+          <div id="dttot-result"><div class="loading">Belum ada query</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Negative News Hits</div>
+          <div id="news-result"><div class="loading">Belum ada query</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 8: PRIVATE SECTOR AML -->
+    <div class="page" id="p-8">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Private Sector AML — DNFBP per FATF Rec 22-23</div>
+        <div style="font-size:12px;color:var(--t3);margin-bottom:10px">
+          Screening untuk transaksi properti, logam mulia/permata, kendaraan mewah, dan deteksi shell company / UBO tracing.
+          Indonesian regulatory basis: PP No.43/2015, PMK No.55/2017.
+        </div>
+      </div>
+
+      <div class="row2">
+        <div class="card">
+          <div class="card-title">Property Transaction Screening</div>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:12px">
+            <input id="ps-buyer" placeholder="Buyer ID" value="KTP_3175020101800001" style="background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:8px;color:var(--t1);font-family:var(--mono);font-size:11px">
+            <input id="ps-amount" type="number" placeholder="Sale price IDR" value="3500000000" style="background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:8px;color:var(--t1);font-family:var(--mono);font-size:11px">
+            <input id="ps-appraised" type="number" placeholder="Appraised value IDR" value="5000000000" style="background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:8px;color:var(--t1);font-family:var(--mono);font-size:11px">
+            <input id="ps-cash" type="number" placeholder="Cash portion IDR" value="2000000000" style="background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:8px;color:var(--t1);font-family:var(--mono);font-size:11px">
+            <select id="ps-country" style="background:var(--bg3);border:1px solid var(--b2);border-radius:6px;padding:8px;color:var(--t1);font-family:var(--mono);font-size:11px">
+              <option value="ID">Indonesia</option>
+              <option value="SG">Singapore</option>
+              <option value="VG">British Virgin Islands</option>
+            </select>
+            <button class="btn btn-danger" onclick="screenProperty()">Screen Transaksi →</button>
+          </div>
+          <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--b1)">
+            <div class="card-title" style="margin:0 0 8px">UBO / Shell Company Demo</div>
+            <button class="btn btn-primary" style="width:100%" onclick="seedUboDemo()">Seed Demo (PT Maju → BVI shell → PEP)</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title" id="ps-result-title">Hasil Screening + UBO</div>
+          <div id="ps-result"><div class="loading">Submit form di kiri</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 9: MULTI-CHAIN CRYPTO -->
+    <div class="page" id="p-9">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Multi-chain Crypto Tracing</div>
+        <div style="font-size:12px;color:var(--t3);margin-bottom:10px">
+          Query wallet di Bitcoin, Ethereum, BNB Smart Chain, Polygon, dan Tron lewat satu interface.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="mc-addr" placeholder="Wallet address..." value="bc1q9zpv3yrgcdtsxa8w27avs5cd5kek85wj4lugj3" style="flex:1;min-width:240px;background:var(--bg3);border:1px solid var(--b2);border-radius:7px;padding:9px 13px;color:var(--t1);font-family:var(--mono);font-size:12px">
+          <select id="mc-chain" style="background:var(--bg3);border:1px solid var(--b2);border-radius:7px;padding:9px 13px;color:var(--t1);font-family:var(--mono);font-size:12px">
+            <option value="auto">Auto detect</option>
+            <option value="btc">Bitcoin</option>
+            <option value="eth">Ethereum</option>
+            <option value="bsc">BNB Smart Chain</option>
+            <option value="polygon">Polygon</option>
+            <option value="tron">Tron</option>
+          </select>
+          <button class="btn btn-primary" onclick="multichainFetch()">Fetch →</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap">
+          <button class="chip" onclick="setMc('bc1q9zpv3yrgcdtsxa8w27avs5cd5kek85wj4lugj3','btc')">BTC sample</button>
+          <button class="chip" onclick="setMc('0x8589427373d6d84e98730d7795d8f6f8731fda16','eth')">ETH: Tornado Cash</button>
+          <button class="chip" onclick="setMc('TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t','tron')">Tron USDT contract</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Hasil Multi-chain Query</div>
+        <div id="mc-result"><div class="loading">Belum ada query</div></div>
+      </div>
+    </div>
+
+    <!-- PAGE 10: MODEL MONITORING -->
+    <div class="page" id="p-10">
+      <div class="metrics">
+        <div class="metric"><div class="metric-label">Layer 0 preds (24h)</div><div class="metric-val mv-blue" id="mon-l0">—</div><div class="metric-sub" id="mon-l0-rate">—</div></div>
+        <div class="metric"><div class="metric-label">Layer 1 preds (24h)</div><div class="metric-val mv-amber" id="mon-l1">—</div><div class="metric-sub" id="mon-l1-rate">—</div></div>
+        <div class="metric"><div class="metric-label">Layer 2 preds (24h)</div><div class="metric-val mv-red" id="mon-l2">—</div><div class="metric-sub" id="mon-l2-rate">—</div></div>
+        <div class="metric"><div class="metric-label">Overall PSI</div><div class="metric-val mv-green" id="mon-psi">—</div><div class="metric-sub" id="mon-psi-sev">—</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="seedMonitoring()">Seed Demo Predictions</button>
+        <button class="btn" onclick="loadMonitoring()">Refresh</button>
+      </div>
+      <div class="card">
+        <div class="card-title">Feature Drift Report (PSI + KS test)</div>
+        <table class="tbl">
+          <thead><tr><th>Feature</th><th>PSI</th><th>KS stat</th><th>KS p-value</th><th>Severity</th></tr></thead>
+          <tbody id="drift-tbody"><tr><td colspan="5"><div class="loading">Klik Refresh untuk compute drift</div></td></tr></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PAGE 11: INVESTIGATION TIMELINE -->
+    <div class="page" id="p-11">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Investigation Timeline — Chronological Transaction Flow</div>
+        <div style="font-size:12px;color:var(--t3);margin-bottom:10px">
+          Visualisasi kronologi transaksi seputar suatu wallet/entitas. Membantu compliance officer
+          mendapatkan "narasi" atas serangkaian transaksi mencurigakan.
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="tl-id" placeholder="Wallet/Entity ID..." value="WALLET_0x000000000002" style="flex:1;min-width:240px;background:var(--bg3);border:1px solid var(--b2);border-radius:7px;padding:9px 13px;color:var(--t1);font-family:var(--mono);font-size:12px">
+          <button class="btn btn-primary" onclick="loadTimeline()">Render Timeline →</button>
+        </div>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <div class="card-title" style="margin:0">Timeline (zoom: scroll horizontal)</div>
+          <div style="display:flex;gap:14px;font-size:10px;color:var(--t3);font-family:var(--mono)">
+            <span style="color:var(--blue2)">● Incoming</span>
+            <span style="color:var(--amber2)">● Outgoing</span>
+            <span style="color:var(--red2)">● Flagged</span>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <canvas id="timeline-canvas" style="display:block;min-width:900px;height:340px"></canvas>
+        </div>
+        <div id="timeline-summary" style="margin-top:10px;font-size:11px;color:var(--t3);font-family:var(--mono)"></div>
+      </div>
+    </div>
+
+    <!-- PAGE 12: PRIVACY COIN MONITOR -->
+    <div class="page" id="p-12">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Privacy Coin Monitor — Monero · Zcash · Dash</div>
+        <div style="font-size:12px;color:var(--t3);margin-bottom:6px">
+          Privacy coin dirancang anonim secara kriptografis — transaksi internalnya
+          <b>tidak dapat dilacak siapa pun</b>, termasuk Chainalysis. FinCrime menerapkan
+          strategi standar industri: memantau <b>pintu masuk &amp; keluar (on/off-ramp)</b>
+          ke exchange pendukung privacy coin, plus auto-flag karena Bappebti tidak
+          mengizinkan privacy coin di Indonesia.
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Matriks 3-Tier Keterlacakan</div>
+        <div id="pc-matrix"><div class="loading">Memuat matriks</div></div>
+      </div>
+
+      <div class="row2">
+        <div class="card">
+          <div class="card-title">Cek Wallet — Indikasi Konversi Privacy Coin</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px">
+            <input id="pc-addr" placeholder="Wallet address (ETH/BTC)..." value="0x28c6c06298d514db089934071355e5743bf21d60" style="flex:1;min-width:220px;background:var(--bg3);border:1px solid var(--b2);border-radius:7px;padding:9px 13px;color:var(--t1);font-family:var(--mono);font-size:12px">
+            <button class="btn btn-danger" onclick="checkPrivacyCoin()">Cek →</button>
+          </div>
+          <div style="font-size:11px;color:var(--t3)">
+            Contoh address di atas adalah hot-wallet exchange yang historis mendukung Monero.
+          </div>
+          <div id="pc-result" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Info Privacy Coin</div>
+          <div style="display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap">
+            <button class="chip" onclick="pcInfo('XMR')">Monero</button>
+            <button class="chip" onclick="pcInfo('ZEC')">Zcash</button>
+            <button class="chip" onclick="pcInfo('DASH')">Dash</button>
+          </div>
+          <div id="pc-info"><div class="loading">Klik salah satu coin</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 5: LIVE TRACE -->
+    <div class="page" id="p-5">
+      <div class="card" style="margin-bottom:12px">
+        <div class="card-title">Trace Wallet — Investigasi Aliran Dana (Real GraphSAGE GNN)</div>
+        <div style="font-size:12px;color:var(--t3);margin-bottom:14px">Masukkan wallet ID untuk menelusuri jaringan transaksinya menggunakan GraphSAGE GNN dari Layer 2.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <input id="trace-input" type="text" value="WALLET_0x000000000002"
+            style="flex:1;min-width:240px;background:var(--bg3);border:1px solid var(--b2);border-radius:8px;padding:11px 14px;color:var(--t1);font-family:var(--mono);font-size:12px;outline:none">
+          <button class="btn btn-danger" style="padding:11px 22px" onclick="runTrace()">Trace Wallet →</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap" id="trace-examples">
+          <span style="font-size:10px;color:var(--t3);align-self:center;margin-right:4px">Quick:</span>
+          <button class="chip" onclick="quickTrace(0)">Fraud wallet #1</button>
+          <button class="chip" onclick="quickTrace(1)">Fraud wallet #2</button>
+          <button class="chip" onclick="quickTrace(2)">Normal wallet</button>
+        </div>
+      </div>
+
+      <div id="trace-result" style="display:none">
+        <div class="metrics" style="grid-template-columns:repeat(4,1fr)">
+          <div class="metric"><div class="metric-label">FRAUD SCORE</div><div class="metric-val" id="tr-score">—</div><div class="metric-sub" id="tr-risk">—</div></div>
+          <div class="metric"><div class="metric-label">LAYERING SCORE</div><div class="metric-val" id="tr-layering">—</div><div class="metric-sub">Layer 2 DFS</div></div>
+          <div class="metric"><div class="metric-label">SUBGRAPH SIZE</div><div class="metric-val mv-blue" id="tr-conn">—</div><div class="metric-sub">k-hop nodes</div></div>
+          <div class="metric"><div class="metric-label">POLA TERDETEKSI</div><div class="metric-val mv-amber" id="tr-pat" style="font-size:18px">—</div><div class="metric-sub">pattern flags</div></div>
+        </div>
+
+        <div class="row2">
+          <div class="card">
+            <div class="card-title">Peta Jaringan Transaksi</div>
+            <canvas id="trace-graph" style="width:100%;height:280px"></canvas>
+            <div style="display:flex;gap:14px;font-size:10px;color:var(--t3);margin-top:8px;font-family:var(--mono)">
+              <span style="color:var(--red2)">● Fraud</span>
+              <span style="color:var(--amber2)">● Suspicious</span>
+              <span style="color:var(--blue2)">● Normal</span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title">Pola Mencurigakan Terdeteksi</div>
+            <div id="tr-patterns" style="margin-bottom:16px"></div>
+            <div class="card-title" style="margin-top:8px">Wallet Terkait (Top Flagged)</div>
+            <div id="tr-connections"></div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:13px;color:var(--t1);font-weight:600;margin-bottom:2px">Tindak lanjut investigasi</div>
+              <div style="font-size:11px;color:var(--t3)">Hasil trace dapat langsung dikonversi menjadi laporan APU/PPT</div>
+            </div>
+            <div style="display:flex;gap:8px">
+              <button class="btn" onclick="downloadTraceJson()">Export bukti digital</button>
+              <button class="btn btn-danger" onclick="generateLtkmFromTrace()">Buat Laporan LTKM →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

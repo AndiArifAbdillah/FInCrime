@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<title>LTKT — {{ p.report_id }}</title>
+<style>
+  body { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11pt; color: #1a1a1a; margin: 30px; }
+  h1 { font-size: 16pt; }
+  h2 { font-size: 12pt; border-bottom: 2px solid #006699; padding-bottom: 4px; margin-top: 20px; color: #006699; }
+  .meta { background: #f0f8ff; padding: 10px 14px; border-left: 4px solid #006699; font-size: 10pt; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 9.5pt; }
+  th, td { border: 1px solid #ccc; padding: 6px 8px; text-align: left; }
+  th { background: #efefef; }
+  .total { background: #e7f5ff; font-weight: bold; }
+  .footer { margin-top: 30px; font-size: 9pt; color: #666; border-top: 1px solid #ddd; padding-top: 8px; }
+</style>
+</head>
+<body>
+<h1>LAPORAN TRANSAKSI KEUANGAN TUNAI (LTKT)</h1>
+<div class="meta">
+  <strong>Nomor Laporan:</strong> {{ p.report_id }}<br>
+  <strong>Tanggal Pelaporan:</strong> {{ p.report_date }}<br>
+  <strong>Kode Lembaga:</strong> {{ p.institution_code }} — {{ p.institution_name }}<br>
+  <strong>Dihasilkan oleh:</strong> FinCrime System — {{ generated_at }}
+</div>
+
+<h2>A. Data Nasabah</h2>
+<table>
+  <tr><th>Nama</th><td>{{ p.customer_name }}</td></tr>
+  <tr><th>ID Nasabah</th><td>{{ p.customer_id }}</td></tr>
+  <tr><th>Tipe</th><td>{{ p.customer_type }}</td></tr>
+</table>
+
+<h2>B. Transaksi Tunai (≥ Rp 500.000.000)</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Tx ID</th><th>Tanggal</th><th>Channel</th>
+      <th>Penerima</th><th>Jumlah (IDR)</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for t in p.transactions %}
+    <tr>
+      <td>{{ t.tx_id }}</td>
+      <td>{{ t.timestamp | dt }}</td>
+      <td>{{ t.channel }}</td>
+      <td>{{ t.receiver_id }}</td>
+      <td style="text-align:right">{{ t.amount_idr | idr }}</td>
+    </tr>
+  {% endfor %}
+    <tr class="total">
+      <td colspan="4">TOTAL — {{ p.transaction_count }} transaksi</td>
+      <td style="text-align:right">{{ p.total_amount | idr }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="footer">
+  Laporan dihasilkan otomatis oleh FinCrime System sesuai UU TPPU dan
+  ketentuan PPATK terkait pelaporan transaksi keuangan tunai.
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies (core only — fast)
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements-core.txt
+
+      - name: Generate sample data
+        run: |
+          python scripts/generate_sample_data.py --individuals 500 --corporates 50 --wallets 200 --transactions 2000
+
+      - name: Train fast models (Layer 0 + Layer 1 only)
+        run: |
+          python -m src.layer0_risk_scoring.train
+          python -m src.layer1_fraud_detection.train --no-ae
+
+      - name: Run fast unit tests
+        run: |
+          pytest -m "not slow" -v --tb=short
+
+      - name: Verify API loads + key endpoints respond
+        run: |
+          python -c "
+          from fastapi.testclient import TestClient
+          from src.api.main import app
+          c = TestClient(app)
+          assert c.get('/health').status_code == 200
+          assert c.get('/').status_code == 200
+          assert c.get('/v1/overview/metrics').status_code == 200
+          assert c.get('/v1/cases/list').status_code == 200
+          assert c.get('/v1/screening/dttot/list').status_code in (200, 503)
+          print('API smoke OK')
+          "
+
+      - name: Run Wave 1 & 2 smoke
+        run: |
+          python scripts/test_wave1.py
+          python scripts/test_wave2.py
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Install ruff
+        run: pip install ruff
+      - name: Ruff check
+        run: ruff check src/ scripts/ --output-format=github
+
+  build-docker:
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image
+        run: docker build -t fincrime/api:${{ github.sha }} -f docker/Dockerfile.api .
+      - name: Build dashboard image
+        run: docker build -t fincrime/dashboard:${{ github.sha }} -f docker/Dockerfile.dashboard .

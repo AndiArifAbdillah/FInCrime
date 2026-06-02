@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fincrime-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts: [api.fincrime.id, dashboard.fincrime.id]
+      secretName: fincrime-tls
+  rules:
+    - host: api.fincrime.id
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fincrime-api
+                port: { number: 80 }
+    - host: dashboard.fincrime.id
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fincrime-dashboard
+                port: { number: 80 }

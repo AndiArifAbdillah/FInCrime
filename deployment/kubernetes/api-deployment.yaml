@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fincrime-api
+  labels: { app: fincrime, component: api }
+spec:
+  replicas: 3
+  selector: { matchLabels: { app: fincrime, component: api } }
+  template:
+    metadata:
+      labels: { app: fincrime, component: api }
+    spec:
+      containers:
+      - name: api
+        image: fincrime/api:0.1.0
+        ports: [{ containerPort: 8000 }]
+        envFrom:
+        - secretRef: { name: fincrime-secrets }
+        - configMapRef: { name: fincrime-config }
+        resources:
+          requests: { cpu: "500m", memory: "1Gi" }
+          limits:   { cpu: "2",    memory: "4Gi" }
+        readinessProbe:
+          httpGet: { path: /ready, port: 8000 }
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet: { path: /health, port: 8000 }
+          initialDelaySeconds: 30
+          periodSeconds: 15
+---
+apiVersion: v1
+kind: Service
+metadata: { name: fincrime-api }
+spec:
+  selector: { app: fincrime, component: api }
+  ports: [{ port: 80, targetPort: 8000 }]
+  type: ClusterIP

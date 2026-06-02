@@ -1,0 +1,31 @@
+{
+  "name": "FinCrime",
+  "short_name": "FinCrime",
+  "description": "End-to-End Financial Crime Intelligence System for Indonesia",
+  "lang": "id",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#07090f",
+  "background_color": "#07090f",
+  "icons": [
+    {
+      "src": "/static/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["finance", "business", "productivity"],
+  "shortcuts": [
+    { "name": "Cases",         "url": "/?p=6", "icons": [{"src": "/static/icon-192.svg", "sizes": "192x192"}] },
+    { "name": "Screening",     "url": "/?p=7", "icons": [{"src": "/static/icon-192.svg", "sizes": "192x192"}] },
+    { "name": "Live Trace",    "url": "/?p=5", "icons": [{"src": "/static/icon-192.svg", "sizes": "192x192"}] }
+  ]
+}
