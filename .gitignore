@@ -76,5 +76,9 @@ desktop.ini
 # Office temp/lock files
 ~$*
 
+# Local tooling & runtime databases (regenerated locally)
+.claude/settings.local.json
+data/*.db
+
 # Streamlit
 .streamlit/secrets.toml
