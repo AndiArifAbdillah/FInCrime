@@ -1,11 +1,12 @@
 """BNB Smart Chain (BSC) + Polygon — EVM-compatible chains.
 
-Both use Etherscan-clone APIs (BscScan, PolygonScan). Reuses the same query
-shape as the existing Etherscan connector.
+Uses the Etherscan API V2 unified endpoint: ONE Etherscan API key works across
+BSC, Polygon, and 60+ EVM chains by passing the chain ID. No separate BscScan /
+PolygonScan key needed (those legacy V1 endpoints are being deprecated).
 
-API keys:
-    - BSC:     https://bscscan.com/myapikey       (free 5/s, 100k/day)
-    - Polygon: https://polygonscan.com/myapikey   (free 5/s, 100k/day)
+    - BSC     -> chainid 56
+    - Polygon -> chainid 137
+    Key: set ETHERSCAN_API_KEY in .env  (https://etherscan.io/myapikey)
 """
 from __future__ import annotations
 
@@ -22,17 +23,19 @@ from .unified import ChainTransaction
 
 log = get_logger("multichain.bsc_polygon")
 
+# Etherscan API V2 — single endpoint + chainid for all EVM chains.
+ETHERSCAN_V2_BASE = "https://api.etherscan.io/v2/api"
 
 CHAIN_CONFIG = {
     "bsc": {
-        "base": "https://api.bscscan.com/api",
-        "key_env": "BSCSCAN_API_KEY",
+        "chainid": 56,
+        "key_env": "BSCSCAN_API_KEY",      # optional legacy fallback
         "native": "BNB",
-        "to_idr": 9_500_000.0,         # placeholder rate
+        "to_idr": 9_500_000.0,             # placeholder rate
     },
     "polygon": {
-        "base": "https://api.polygonscan.com/api",
-        "key_env": "POLYGONSCAN_API_KEY",
+        "chainid": 137,
+        "key_env": "POLYGONSCAN_API_KEY",  # optional legacy fallback
         "native": "MATIC",
         "to_idr": 12_000.0,
     },
@@ -46,10 +49,13 @@ class BscPolygonConnector:
             raise ValueError(f"Unsupported chain {chain}")
         self.chain = chain
         cfg = CHAIN_CONFIG[chain]
-        self.base = cfg["base"]
+        self.chainid = cfg["chainid"]
         self.native = cfg["native"]
         self.to_idr = cfg["to_idr"]
-        self.api_key = api_key or os.environ.get(cfg["key_env"], "")
+        # Etherscan API V2: one key for all chains. Prefer ETHERSCAN_API_KEY;
+        # fall back to a chain-specific legacy key only if explicitly set.
+        self.api_key = (api_key or settings.etherscan_api_key
+                        or os.environ.get(cfg["key_env"], ""))
         self.rate_limit_sec = rate_limit_sec
         self._last_call = 0.0
 
@@ -61,12 +67,13 @@ class BscPolygonConnector:
 
     def _get(self, params: dict, timeout: int = 15) -> dict:
         if not self.api_key:
-            log.warning(f"{self.chain}.no_api_key — set {CHAIN_CONFIG[self.chain]['key_env']} in .env")
+            log.warning(f"{self.chain}.no_api_key — set ETHERSCAN_API_KEY in .env "
+                        "(Etherscan API V2 covers BSC/Polygon with one key)")
             return {"status": "0", "result": []}
-        params = {**params, "apikey": self.api_key}
+        params = {**params, "chainid": self.chainid, "apikey": self.api_key}
         self._throttle()
         with httpx.Client(timeout=timeout) as c:
-            r = c.get(self.base, params=params)
+            r = c.get(ETHERSCAN_V2_BASE, params=params)
             r.raise_for_status()
             return r.json()
 
