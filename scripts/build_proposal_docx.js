@@ -196,7 +196,7 @@ SECTIONS.push(new Table({
     labelValueRow("Nama Tim", "FinCrime"),
     labelValueRow("ID Tim", "[ISI: kode tim PIDI]"),
     labelValueRow("Project Lead", "Andi Arif Abdillah"),
-    labelValueRow("Institusi", "Universitas Gunadarma & UNTIRTA"),
+    labelValueRow("Institusi", "Universitas Gunadarma & Universitas Sultan Ageng Tirtayasa"),
     labelValueRow("Anggota", "4 orang lintas-institusi"),
     labelValueRow("Status", "Prototype (Functional MVP)"),
   ],
@@ -235,7 +235,7 @@ const teamRows = [
   ["Andi Arif Abdillah", "Universitas Gunadarma", "Project Lead, ML Engineer & Blockchain Analytics", "Layer 2 (GraphSAGE GNN Crypto Tracing) + Multi-chain crypto integration (BTC, ETH, BSC, Polygon, Tron)"],
   ["Raya Sesan Firdaus", "Universitas Gunadarma", "ML Engineer & Data Intelligence", "Layer 0 (XGBoost Risk Scoring + SHAP), OFAC/UN/DTTOT sanctions screening, negative news scraper"],
   ["Rambu Ilalang", "Universitas Gunadarma", "Backend AI & MLOps Engineer", "Layer 1 (Isolation Forest + Autoencoder), FastAPI, Docker/Kubernetes, Prometheus+Grafana, Airflow DAGs"],
-  ["TB Muhammad Fikri Arsyad", "UNTIRTA", "Fullstack Developer", "Layer 3 (LTKM/LTKT regtech), dashboard web UI 13 tab termasuk Privacy Coin Monitor, mobile PWA, Telegram bot"],
+  ["TB Muhammad Fikri Arsyad", "Universitas Sultan Ageng Tirtayasa", "Fullstack Developer", "Layer 3 (LTKM/LTKT regtech), dashboard web UI 13 tab termasuk Privacy Coin Monitor, mobile PWA, Telegram bot"],
 ];
 
 const teamHeader = new TableRow({
@@ -1112,7 +1112,7 @@ SECTIONS.push(bulletPRich([
 ]));
 SECTIONS.push(bulletPRich([
   new TextRun({ text: "Akademis + Internasional: ", bold: true, font: FONT, size: 22 }),
-  new TextRun({ text: "Gunadarma + UNTIRTA, BI Institute, ITB/UI/UGM. Chainalysis/Elliptic data sharing, World Bank Financial Inclusion.", font: FONT, size: 22 }),
+  new TextRun({ text: "Gunadarma + Universitas Sultan Ageng Tirtayasa, BI Institute, ITB/UI/UGM. Chainalysis/Elliptic data sharing, World Bank Financial Inclusion.", font: FONT, size: 22 }),
 ]));
 SECTIONS.push(body(
   "Channel: direct sales (Enterprise), self-service signup (Free/Pro), partner reseller komisi (DNFBP), OJK Sandbox entry point, open-source non-core."

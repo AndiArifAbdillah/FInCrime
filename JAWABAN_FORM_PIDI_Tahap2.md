@@ -35,7 +35,7 @@ Tim FinCrime merupakan kolaborasi lintas-institusi yang terdiri dari empat anggo
 
 - Rambu Ilalang (Universitas Gunadarma) — Backend AI & MLOps Engineer. Mengembangkan Layer 1 (Isolation Forest + Autoencoder fraud detection), FastAPI service, Docker/Kubernetes, Prometheus+Grafana observability, dan Airflow DAGs.
 
-- TB Muhammad Fikri Arsyad (UNTIRTA) — Fullstack Developer. Mengembangkan Layer 3 (LTKM/LTKT regtech), dashboard web UI 13 tab, mobile PWA, dan Telegram bot.
+- TB Muhammad Fikri Arsyad (Universitas Sultan Ageng Tirtayasa) — Fullstack Developer. Mengembangkan Layer 3 (LTKM/LTKT regtech), dashboard web UI 13 tab, mobile PWA, dan Telegram bot.
 
 ---
 
@@ -448,7 +448,7 @@ Partnership Institusi Keuangan: tier-1 banks via OJK Sandbox, tier-2/3 via Perba
 
 Partnership Sektor Private (DNFBP): Ikatan Notaris Indonesia (30.000+ notaris), APPI properti, Asosiasi Logam Mulia, Pejabat Lelang Kemkeu.
 
-Partnership Akademis & Internasional: Gunadarma + UNTIRTA, Bank Indonesia Institute, ITB/UI/UGM, serta kolaborasi data crypto (Chainalysis/Elliptic) dan World Bank Financial Inclusion.
+Partnership Akademis & Internasional: Gunadarma + Universitas Sultan Ageng Tirtayasa, Bank Indonesia Institute, ITB/UI/UGM, serta kolaborasi data crypto (Chainalysis/Elliptic) dan World Bank Financial Inclusion.
 
 Channel Distribusi: direct sales (Enterprise), self-service signup (Free/Pro), partner reseller (komisi-based), OJK Sandbox sebagai entry point, open-source non-core.
 

@@ -17,7 +17,7 @@ End-to-End Financial Crime Intelligence System for Indonesia
 
 Submission Tahap 2 — PIDI Bank Indonesia 2026
 
-Tim FinCrime (Universitas Gunadarma + UNTIRTA)
+Tim FinCrime (Universitas Gunadarma + Universitas Sultan Ageng Tirtayasa)
 ```
 
 ---
@@ -191,7 +191,7 @@ TIM 4 ORANG LINTAS-INSTITUSI
 Andi Arif Abdillah (Gunadarma) — Project Lead + Layer 2 GNN
 Raya Sesan Firdaus (Gunadarma) — Layer 0 + Sanctions
 Rambu Ilalang (Gunadarma) — Layer 1 + MLOps
-TB Muhammad Fikri Arsyad (UNTIRTA) — Layer 3 + Dashboard
+TB Muhammad Fikri Arsyad (Universitas Sultan Ageng Tirtayasa) — Layer 3 + Dashboard
 ```
 
 ---
@@ -249,7 +249,7 @@ Built today.  Future-proof tomorrow.
 
 | Slide | Talking points |
 |-------|----------------|
-| 1 | "Kami tim FinCrime dari Gunadarma dan UNTIRTA. Solusi kami: end-to-end financial crime intelligence." |
+| 1 | "Kami tim FinCrime dari Gunadarma dan Universitas Sultan Ageng Tirtayasa. Solusi kami: end-to-end financial crime intelligence." |
 | 2 | "Indonesia kehilangan triliunan rupiah. Sumber: PPATK, OJK, FATF Mutual Eval 2023." |
 | 3 | "Tiga akar masalah yang kami identifikasi di Tahap 1, masih relevan di Tahap 2." |
 | 4 | "4-layer pipeline. Setiap layer punya target latency. Total <5 menit end-to-end." |

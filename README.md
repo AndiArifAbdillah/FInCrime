@@ -163,7 +163,7 @@ FInCrime/
 | Andi Arif Abdillah | Universitas Gunadarma | Project Lead, Layer 2 (GNN) |
 | Raya Sesan Firdaus | Universitas Gunadarma | Layer 0 (Risk Scoring) |
 | Rambu Ilalang | Universitas Gunadarma | Layer 1 + MLOps |
-| TB Muhammad Fikri Arsyad | UNTIRTA | Layer 3 + Dashboard |
+| TB Muhammad Fikri Arsyad | Universitas Sultan Ageng Tirtayasa | Layer 3 + Dashboard |
 
 ---
 
