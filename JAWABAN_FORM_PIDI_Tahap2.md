@@ -27,15 +27,15 @@ FinCrime: End-to-End Financial Crime Intelligence System for Indonesia
 ## 4. Team Composition
 *(Sebutkan nama ketua dan anggota, serta peran masing-masing dalam project ini.)*
 
-Tim FinCrime merupakan kolaborasi lintas-institusi yang terdiri dari empat anggota dengan peran spesifik:
+Tim FinCrime adalah kolaborasi lintas-institusi dengan empat anggota berperan spesifik:
 
-- Andi Arif Abdillah (Universitas Gunadarma) — Project Lead, ML Engineer & Blockchain Analytics. Memimpin koordinasi tim dan bertanggung jawab atas Layer 2 (GraphSAGE GNN Crypto Tracing), Multi-chain crypto integration (BTC, ETH, BSC, Polygon, Tron), dan modul Privacy Coin Monitor.
+- Andi Arif Abdillah (Universitas Gunadarma) — Project Lead & ML/Blockchain Engineer. Layer 2 (GraphSAGE GNN crypto tracing), integrasi multi-chain (BTC/ETH/BSC/Polygon/Tron), dan Privacy Coin Monitor.
 
-- Raya Sesan Firdaus (Universitas Gunadarma) — ML Engineer & Data Intelligence. Bertanggung jawab atas Layer 0 (XGBoost Risk Scoring + SHAP), OFAC/UN/DTTOT sanctions screening, dan negative news scraper.
+- Raya Sesan Firdaus (Universitas Gunadarma) — ML & Data Engineer. Layer 0 (XGBoost Risk Scoring + SHAP), sanctions screening OFAC/UN/DTTOT, dan negative news scraper.
 
-- Rambu Ilalang (Universitas Gunadarma) — Backend AI & MLOps Engineer. Mengembangkan Layer 1 (Isolation Forest + Autoencoder fraud detection), FastAPI service, Docker/Kubernetes, Prometheus+Grafana observability, dan Airflow DAGs.
+- Rambu Ilalang (Universitas Gunadarma) — Backend & MLOps Engineer. Layer 1 (Isolation Forest + Autoencoder), FastAPI, Docker/Kubernetes, observability Prometheus+Grafana, dan Airflow.
 
-- TB Muhammad Fikri Arsyad (Universitas Sultan Ageng Tirtayasa) — Fullstack Developer. Mengembangkan Layer 3 (LTKM/LTKT regtech), dashboard web UI 13 tab, mobile PWA, dan Telegram bot.
+- TB Muhammad Fikri Arsyad (Universitas Sultan Ageng Tirtayasa) — Fullstack Developer. Layer 3 (regtech LTKM/LTKT), dashboard web 13 tab, mobile PWA, dan Telegram bot.
 
 ---
 
@@ -406,7 +406,7 @@ Biaya Operasional Tahunan (Tahun 1 estimasi):
 - Domain, SSL, miscellaneous — Rp 5 juta/tahun
 - Total operational: ~Rp 280 juta/tahun
 
-Biaya SDM (4 anggota tim + advisor): engineering Rp 1,2 miliar/tahun, DevOps+Security Rp 300 juta/tahun, compliance advisor part-time Rp 100 juta/tahun. Total ~Rp 1,6 miliar/tahun.
+Biaya SDM (proyeksi gaji pasar mid-level Jakarta 2025, sumber Jobstreet/Glassdoor): Lead/ML ~Rp 30 jt/bln, ML-Data Engineer ~Rp 20 jt/bln, Backend/MLOps ~Rp 18 jt/bln, Fullstack ~Rp 16 jt/bln (≈ Rp 1,0 miliar/tahun untuk 4 orang) + compliance advisor part-time ~Rp 100 juta/tahun. Total SDM ≈ Rp 1,1 miliar/tahun — jauh di bawah benchmark global (ML engineer AS ~Rp 2,5 miliar/tahun).
 
 Biaya One-Time (Tahun 1): ISO 27001 audit + certification Rp 200 juta, PPATK SIPESAT MoU + integration Rp 100 juta, OJK Regulatory Sandbox application Rp 50 juta.
 
@@ -414,7 +414,7 @@ Sustainability Strategy:
 - Break-even di Tahun 2 dengan 8 institusi mitra Enterprise tier
 - Revenue diversification (SaaS + per-tx + consulting + grant)
 - Open-source non-core untuk komunitas (drive adoption)
-- Strategic partnership untuk distribution leverage (Perbanas, INI, AFTECH)
+- Strategic partnership distribusi (Perbanas, AFTECH)
 - Reinvest 30% revenue ke R&D
 
 ---
@@ -459,15 +459,15 @@ Channel Distribusi: direct sales (Enterprise), self-service signup (Free/Pro), p
 
 Masalah AML/CFT sangat penting bagi target pengguna karena:
 
-Untuk lembaga keuangan: POJK No.12/2024 mewajibkan strategi anti-fraud proaktif — non-compliance berisiko denda + pencabutan izin. Compliance officer mengalami burnout karena pekerjaan manual repetitif (LTKM 1-3 hari/lapor).
+Lembaga keuangan: POJK No.12/2024 mewajibkan anti-fraud proaktif — non-compliance berisiko denda + pencabutan izin; compliance officer burnout karena kerja manual (LTKM 1-3 hari).
 
-Untuk ekosistem kripto: volume exchange Indonesia Rp 859 triliun (2024, Bappebti), dan pelaku makin sering memakai privacy coin untuk memutus jejak — padahal mayoritas tools belum punya strategi pemantauannya.
+Ekosistem kripto: volume exchange Indonesia Rp 859 triliun (2024, Bappebti), dan pelaku makin memakai privacy coin untuk memutus jejak — mayoritas tools belum memantaunya.
 
-Untuk regulator: PPATK menerima puluhan ribu laporan/tahun, banyak terlambat. Crypto money laundering Rp 800 miliar (CNBC 2024), illegal investment Rp 142 triliun (Infobank 2024) terus meningkat.
+Regulator: PPATK menerima puluhan ribu laporan/tahun, banyak terlambat. Pencucian uang kripto Rp 800 miliar dan investasi ilegal Rp 142 triliun terus meningkat.
 
-Untuk masyarakat: korban penipuan investasi ilegal meningkat, dan UMKM tidak bisa akses kredit formal karena tidak ada riwayat kredit.
+Masyarakat: korban investasi ilegal meningkat; UMKM sulit akses kredit formal.
 
-Intensitas masalah: HIGH — frequent (harian), costly (triliunan), regulated (mandatory by 2025).
+Intensitas: HIGH — sering (harian), mahal (triliunan), wajib (regulated 2025).
 
 ---
 
@@ -497,18 +497,15 @@ Competitor Landscape: Chainalysis (only crypto, mahal), Actimize/SAS (only banki
 ## 29. Target Market
 *(Segmentasi target market.)*
 
-Primary Market (Tahun 1, ~2.200 institusi keuangan formal): 107 bank umum, 1.700+ BPR, 350+ fintech terdaftar OJK, 12+ exchange kripto berlisensi PFAK Bappebti.
+Primary Market (Tahun 1, ~2.200 institusi keuangan formal): 107 bank umum, 1.700+ BPR, 350+ fintech terdaftar OJK, 12+ exchange kripto PFAK Bappebti.
 
-Secondary Market (Tahun 2, ~85.000 DNFBP): 30.000+ notaris/PPAT, 5.000+ dealer logam mulia, 50.000+ agen properti, 1.000+ KAP, 500+ pejabat lelang.
+Secondary Market (Tahun 2, ~85.000 DNFBP): notaris/PPAT, dealer logam mulia, agen properti, KAP, pejabat lelang.
 
-Tertiary Market (Tahun 3+): regulator (OJK, BI, PPATK, Bappebti, KPK, Kejaksaan), 50+ law firm AML practice, audit firm Big-4 + mid-tier.
+Tertiary Market (Tahun 3+): regulator (OJK, BI, PPATK, Bappebti, KPK, Kejaksaan), law firm AML, audit firm.
 
-User Personas:
-- Bu Sari (35) — Compliance Officer Bank Tier-2 Surabaya, handle 200+ LTKM/bulan manual.
-- Mas Andi (30) — Compliance Lead Exchange Kripto Tier-2, butuh tools cepat untuk on-chain investigation + cek privacy coin.
-- Pak Wahyu (45) — Pengawas Madya OJK, butuh dashboard read-only monitor 12 lembaga.
+User Personas: Bu Sari (35, Compliance Officer bank tier-2, 200+ LTKM/bulan manual); Mas Andi (30, Compliance Lead exchange kripto); Pak Wahyu (45, Pengawas OJK, butuh dashboard read-only).
 
-Go-to-Market Priority: Tahun 1 = 3-5 bank tier-2 via OJK Sandbox; Tahun 2 = nationwide tier-2/3 + exchange kripto; Tahun 3 = tier-1 banks + ASEAN expansion.
+Go-to-Market: Tahun 1 = 3-5 bank tier-2 via OJK Sandbox; Tahun 2 = nationwide + exchange kripto; Tahun 3 = tier-1 banks + ASEAN.
 
 ---
 
@@ -539,38 +536,26 @@ Change Management: pilot mode parallel run 1-3 bulan, trial 30 hari, money-back 
 ## 31. Progress Since the 1st Submission
 *(Perkembangan sejak submission Tahap 1.)*
 
-Perkembangan signifikan sejak Tahap 1 — dari konsep menjadi MVP terverifikasi.
+Dari konsep (Tahap 1: Layer 2 prototype standalone) menjadi MVP 4-layer end-to-end terverifikasi (40+ komponen):
 
-Status Tahap 1: Konsep + Layer 2 prototype standalone.
-Status Tahap 2: Full 4-layer end-to-end working system (40+ komponen).
+(1) Core 4-layer terlatih & API-ready: L0 XGBoost+SHAP (ROC AUC 0.79), L1 IsolationForest+Autoencoder, L2 GraphSAGE+NetworkX, L3 Jinja2+Claude LLM.
 
-(1) Core 4-layer — semua terlatih dan dapat di-query via API: Layer 0 XGBoost+SHAP (ROC AUC 0.79), Layer 1 IsolationForest+Autoencoder+rules, Layer 2 GraphSAGE+NetworkX, Layer 3 Jinja2+Claude LLM.
+(2) Frontend: Web UI 13 tab (termasuk Privacy Coin Monitor), mobile PWA, Telegram bot (/privacycoin), WebSocket alerts.
 
-(2) Frontend & UX: Web UI 13 tab (termasuk Privacy Coin Monitor), mobile PWA, Telegram bot dengan command /privacycoin, Command Palette Ctrl+K, multi-bahasa ID/EN, WebSocket alerts, Investigation Timeline viz.
+(3) Coverage AML baru: Privacy Coin Monitor (on/off-ramp Monero/Zcash/Dash, auto-flag non-PFAK), multi-chain BTC/ETH/BSC/Polygon/Tron, OFAC (19.041) + UN (1.004) + DTTOT, news scraper 5 media.
 
-(3) AML/CFT Coverage Expansion: Privacy Coin Monitor (on/off-ramp Monero/Zcash/Dash, matriks 3-tier, auto-flag non-PFAK Bappebti), multi-chain crypto (BTC/ETH/BSC/Polygon/Tron), OFAC SDN (19.041 entitas + 313 alamat crypto), UN Consolidated (1.004 entitas) + DTTOT seed, negative news scraper 5 media.
+(4) MLOps: Prometheus+Grafana, MLflow, Airflow 4 DAGs, audit log immutable, CI/CD, Docker+Kubernetes.
 
-(4) MLOps & Production: Prometheus+Grafana (7 panels), MLflow registry, Apache Airflow 4 DAGs, immutable audit log, Case Management workflow, GitHub Actions CI/CD, Docker Compose + Kubernetes manifests.
-
-(5) Validation: 14/14 pytest passing, end-to-end pipeline <30 detik dari ingestion ke LTKM, 62+ REST API endpoints dengan OpenAPI docs.
+(5) Validasi: 14/14 test lolos, 62+ endpoint, pipeline <30 detik ke LTKM.
 
 ---
 
 ## 32. Current Status
 *(Status saat ini.)*
 
-Status saat ini: PROTOTYPE (functional MVP) — siap untuk pilot.
+Status: PROTOTYPE (functional MVP). Sistem 4-layer berjalan end-to-end — 62+ REST API, 13 UI tab, data OFAC/UN live, 14/14 test lolos, LTKM otomatis < 5 menit.
 
-- Sistem end-to-end SUDAH BERJALAN dan terverifikasi di local dev environment
-- 40+ component task selesai
-- 62+ REST API endpoints functional (termasuk /v1/privacy-coin/*)
-- 13 UI tab fully implemented dengan real data dari API
-- Multi-chain support + Privacy Coin Monitor active
-- Real OFAC + UN sanctions data sudah ter-load
-- Docker Compose stack working
-- 14/14 unit + integration tests passing
-
-Next Stage Target (3 bulan): pilot deployment di 1 bank mitra via OJK Regulatory Sandbox, production hardening (PostgreSQL, ISO 27001, PPATK SIPESAT), retrain di data real (IBM AML + Elliptic Bitcoin) untuk target ROC AUC > 0.85.
+Bukti pendukung: repo GitHub + demo video (lihat Attachment). Target 3 bulan: pilot 1 bank via OJK Sandbox + retrain data real.
 
 ---
 
@@ -580,7 +565,8 @@ Link Attachment (URL):
 [ISI: GitHub repository, contoh https://github.com/USERNAME/fincrime]
 [ISI: Demo video Google Drive, contoh https://drive.google.com/file/d/XXXXX/view]
 
-File Attachment:
-- Format wajib: PDF (max 5 MB)
-- Penamaan: [ID Tim] - FinCrime End-to-End Financial Crime Intelligence System.pdf
-- Saran isi PDF: cover, executive summary, architecture diagram, screenshot 13 tab UI (termasuk Privacy Coin Monitor), sample LTKM output, roadmap, team bios.
+File/lampiran pendukung (pastikan semua link dapat diakses panitia):
+- Repo GitHub (kode lengkap) + demo video
+- Pitch deck, diagram arsitektur, screenshot 13 tab UI (termasuk Privacy Coin Monitor)
+- Sample LTKM output (PDF), dokumentasi teknis
+(Jika panitia meminta 1 file PDF: gabungkan executive summary + diagram + screenshot.)
