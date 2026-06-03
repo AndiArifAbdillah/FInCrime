@@ -398,24 +398,27 @@ Target revenue: Tahun 1 Rp 2-3 miliar (3 enterprise + 10 professional), Tahun 2 
 *(Struktur biaya dan keberlanjutan.)*
 
 Biaya Operasional Tahunan (Tahun 1 estimasi):
-- Cloud infrastructure — Rp 150 juta/tahun
-- AI inference compute — Rp 50 juta/tahun
-- LLM API (Claude untuk ~50k LTKM) — Rp 30 juta/tahun
-- Third-party API (Etherscan, BscScan, dll) — Rp 20 juta/tahun
-- Security & monitoring tools — Rp 25 juta/tahun
-- Domain, SSL, miscellaneous — Rp 5 juta/tahun
+
+- Cloud infrastructure  Rp 150 juta/tahun
+- AI inference compute  Rp 50 juta/tahun
+- LLM API (Claude untuk ~50k LTKM)  Rp 30 juta/tahun
+- Third-party API (Etherscan, BscScan, dll)  Rp 20 juta/tahun
+- Security & monitoring tools  Rp 25 juta/tahun
+- Domain, SSL, miscellaneous  Rp 5 juta/tahun
 - Total operational: ~Rp 280 juta/tahun
 
-Biaya SDM (proyeksi gaji pasar mid-level Jakarta 2025, sumber Jobstreet/Glassdoor): Lead/ML ~Rp 30 jt/bln, ML-Data Engineer ~Rp 20 jt/bln, Backend/MLOps ~Rp 18 jt/bln, Fullstack ~Rp 16 jt/bln (≈ Rp 1,0 miliar/tahun untuk 4 orang) + compliance advisor part-time ~Rp 100 juta/tahun. Total SDM ≈ Rp 1,1 miliar/tahun — jauh di bawah benchmark global (ML engineer AS ~Rp 2,5 miliar/tahun).
+Biaya SDM (4 anggota tim + advisor): engineering Rp 1,2 miliar/tahun, DevOps+Security Rp 300 juta/tahun, compliance advisor part-time Rp 100 juta/tahun. Total ~Rp 1,6 miliar/tahun.
 
-Biaya One-Time (Tahun 1): ISO 27001 audit + certification Rp 200 juta, PPATK SIPESAT MoU + integration Rp 100 juta, OJK Regulatory Sandbox application Rp 50 juta.
+Biaya One-Time (Tahun 1) untuk Sertifikasi ISO 27001 (Rp 200 juta), integrasi PPATK SIPESAT + GRIPS API (Rp 100 juta), dan OJK Regulatory Sandbox (Rp 50 juta). 
 
 Sustainability Strategy:
+
 - Break-even di Tahun 2 dengan 8 institusi mitra Enterprise tier
 - Revenue diversification (SaaS + per-tx + consulting + grant)
 - Open-source non-core untuk komunitas (drive adoption)
-- Strategic partnership distribusi (Perbanas, AFTECH)
+- Strategic partnership untuk distribution leverage (Perbanas, INI, AFTECH)
 - Reinvest 30% revenue ke R&D
+
 
 ---
 
