@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     # --- Neo4j ---
     neo4j_uri: str = Field(default="bolt://localhost:7687")
     neo4j_user: str = Field(default="neo4j")
-    neo4j_password: str = Field(default="fincrime-dev-password")
+    neo4j_password: str = Field(default="")
 
     # --- Blockchain ---
     etherscan_api_key: str = Field(default="")
@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     # --- API ---
     api_host: str = Field(default="0.0.0.0")
     api_port: int = Field(default=8000)
-    api_secret_key: str = Field(default="change-me")
+    api_secret_key: str = Field(default="")
     api_cors_origins: str = Field(default="http://localhost:8501")
 
     # --- PPATK ---
