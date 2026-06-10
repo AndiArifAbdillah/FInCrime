@@ -290,7 +290,7 @@ Data Partner (target Tahun 1 via MoU):
 - OJK regulatory data feed
 - Bappebti registered exchange list
 
-Feasibility tinggi: ~70% kebutuhan data sudah tersedia gratis publik. Validasi sample sintetis 7.500 entitas + 30k transaksi: Layer 0 ROC AUC = 0.79 (target 0.85+ di data real).
+Feasibility terbukti: ~70% kebutuhan data tersedia gratis publik. Layer 2 GraphSAGE telah di-benchmark pada data NYATA Elliptic (203 ribu transaksi Bitcoin, split temporal standar literatur): ROC AUC 0,92. Layer 0 di data sintetis: ROC AUC 0,79.
 
 ---
 
@@ -541,7 +541,7 @@ Change Management: pilot mode parallel run 1-3 bulan, trial 30 hari, money-back 
 
 Dari konsep (Tahap 1: Layer 2 prototype standalone) menjadi MVP 4-layer end-to-end terverifikasi (40+ komponen):
 
-(1) Core 4-layer terlatih & API-ready: L0 XGBoost+SHAP (ROC AUC 0.79), L1 IsolationForest+Autoencoder, L2 GraphSAGE+NetworkX, L3 Jinja2+Claude LLM.
+(1) Core 4-layer terlatih & API-ready: L0 XGBoost+SHAP (ROC AUC 0.79), L1 IsolationForest+Autoencoder, L2 GraphSAGE — ter-benchmark di data NYATA Elliptic Bitcoin: ROC AUC 0.92, L3 Jinja2+Claude LLM.
 
 (2) Frontend: Web UI 13 tab (termasuk Privacy Coin Monitor), mobile PWA, Telegram bot (/privacycoin), WebSocket alerts.
 
