@@ -38,8 +38,9 @@ const pages = {
   12: { title: "Privacy Coin Monitor", sub: "Monero · Zcash · Dash — on/off-ramp detection" },
 };
 function nav(i) {
-  document.querySelectorAll(".page").forEach((p, j) => p.classList.toggle("active", j === i));
-  document.querySelectorAll(".sb-btn").forEach((b, j) => b.classList.toggle("active", j === i));
+  // match by id, not DOM position — page divs are not in numeric order
+  document.querySelectorAll(".page").forEach(p => p.classList.toggle("active", p.id === `p-${i}`));
+  document.querySelectorAll(".sb-btn").forEach(b => b.classList.toggle("active", b.id === `nb-${i}`));
   setText("tb-title", pages[i].title); setText("tb-sub", pages[i].sub);
   if (i === 0) { setTimeout(drawOverviewChart, 50); loadOverview(); }
   if (i === 1) loadRiskScoring();

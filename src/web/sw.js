@@ -1,7 +1,8 @@
 /*  FinCrime — service worker
-    Cache-first strategy for the shell (HTML/JS/CSS/icons), network-first for /v1/* API.
+    Network-first for the shell (always fresh app when online, cache fallback
+    offline); API/WS never cached. Bump SW_VERSION on deploy to purge caches.
 */
-const SW_VERSION = "fincrime-sw-v1";
+const SW_VERSION = "fincrime-sw-v2";
 const SHELL = [
   "/",
   "/static/app.js",
@@ -32,17 +33,16 @@ self.addEventListener("fetch", (e) => {
   if (url.pathname.startsWith("/v1/") || url.pathname.startsWith("/ws/") || url.pathname === "/metrics") {
     return;
   }
-  // Static shell: cache-first
+  // Static shell: network-first (fresh app), cache fallback when offline
   e.respondWith(
-    caches.match(e.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(e.request).then((resp) => {
-        if (resp && resp.status === 200 && e.request.method === "GET") {
-          const copy = resp.clone();
-          caches.open(SW_VERSION).then((c) => c.put(e.request, copy)).catch(() => {});
-        }
-        return resp;
-      }).catch(() => caches.match("/"));
-    })
+    fetch(e.request).then((resp) => {
+      if (resp && resp.status === 200 && e.request.method === "GET") {
+        const copy = resp.clone();
+        caches.open(SW_VERSION).then((c) => c.put(e.request, copy)).catch(() => {});
+      }
+      return resp;
+    }).catch(() =>
+      caches.match(e.request).then((cached) => cached || caches.match("/"))
+    )
   );
 });
