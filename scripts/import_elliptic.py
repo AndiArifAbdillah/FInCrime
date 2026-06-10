@@ -53,8 +53,8 @@ def main(elliptic_dir: Path, out_dir: Path) -> None:
     for f in (features_csv, edges_csv, classes_csv):
         if not f.exists():
             print(f"\n❌ File tidak ditemukan: {f}")
-            print(f"\nDownload Elliptic Dataset dari Kaggle dulu:")
-            print(f"  https://www.kaggle.com/datasets/ellipticco/elliptic-data-set")
+            print("\nDownload Elliptic Dataset dari Kaggle dulu:")
+            print("  https://www.kaggle.com/datasets/ellipticco/elliptic-data-set")
             print(f"\nExtract ke: {elliptic_dir}\n")
             sys.exit(1)
 
@@ -69,17 +69,17 @@ def main(elliptic_dir: Path, out_dir: Path) -> None:
     print(f"      → {len(features):,} nodes loaded")
 
     # ----- Load classes -----
-    print(f"\n[2/4] Loading classes ...")
+    print("\n[2/4] Loading classes ...")
     classes = pd.read_csv(classes_csv)
     classes.columns = ["txId", "class"]
     # class: '1' = illicit, '2' = licit, 'unknown' = unlabeled
-    print(f"      → Class distribution:")
+    print("      → Class distribution:")
     for cls, count in classes["class"].value_counts().items():
         label = {"1": "ILLICIT", "2": "LICIT", "unknown": "UNKNOWN"}.get(cls, cls)
         print(f"          {label:<10}: {count:>7,}")
 
     # ----- Build entities CSV -----
-    print(f"\n[3/4] Converting to FinCrime entities format ...")
+    print("\n[3/4] Converting to FinCrime entities format ...")
     ent = features[["txId", "timestep"]].copy()
     ent["entity_id"] = "WALLET_" + ent["txId"].astype(str)
     ent["entity_type"] = "wallet"
@@ -116,7 +116,7 @@ def main(elliptic_dir: Path, out_dir: Path) -> None:
     print(f"      → {wallets_path}  ({len(ent_out):,} wallets, {int(ent_out['is_fraud'].sum()):,} labeled illicit)")
 
     # ----- Build edges CSV -----
-    print(f"\n[4/4] Converting edge list ...")
+    print("\n[4/4] Converting edge list ...")
     edges = pd.read_csv(edges_csv)
     edges.columns = ["src_txId", "dst_txId"]
     edges_out = pd.DataFrame({
@@ -138,10 +138,10 @@ def main(elliptic_dir: Path, out_dir: Path) -> None:
     print(f"      → {edges_path}  ({len(edges_out):,} edges, {int(edges_out['is_layering'].sum()):,} illicit-to-illicit)")
 
     # ----- Summary -----
-    print(f"\n" + "=" * 70)
+    print("\n" + "=" * 70)
     print("  DONE — Real Bitcoin labeled data ready in:", out_dir)
     print("=" * 70)
-    print(f"\n  Stats:")
+    print("\n  Stats:")
     print(f"    Wallets total:       {len(ent_out):,}")
     print(f"    Illicit (fraud=1):   {int(ent_out['is_fraud'].sum()):,}")
     print(f"    Licit:               {int((ent['class'] == '2').sum()):,}")
@@ -149,15 +149,15 @@ def main(elliptic_dir: Path, out_dir: Path) -> None:
     print(f"    Edges:               {len(edges_out):,}")
     print(f"    Illicit-illicit:     {int(edges_out['is_layering'].sum()):,}")
 
-    print(f"\n  Next steps:")
-    print(f"    1. Retrain Layer 2 GraphSAGE pada data REAL:")
-    print(f"       .\\fc python -m src.layer2_gnn_tracing.train \\")
+    print("\n  Next steps:")
+    print("    1. Retrain Layer 2 GraphSAGE pada data REAL:")
+    print("       .\\fc python -m src.layer2_gnn_tracing.train \\")
     print(f"           --edges {edges_path} \\")
     print(f"           --entities {wallets_path} \\")
-    print(f"           --epochs 100")
-    print(f"\n    2. Atau retrain Layer 0 XGBoost di sini juga:")
+    print("           --epochs 100")
+    print("\n    2. Atau retrain Layer 0 XGBoost di sini juga:")
     print(f"       .\\fc python -m src.layer0_risk_scoring.train --entities {wallets_path}")
-    print(f"\n    Expected ROC AUC pada Elliptic real: 0.85+  (vs 0.79 di sintetis)")
+    print("\n    Expected ROC AUC pada Elliptic real: 0.85+  (vs 0.79 di sintetis)")
 
 
 if __name__ == "__main__":

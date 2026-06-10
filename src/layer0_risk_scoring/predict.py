@@ -8,11 +8,10 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from src.common.config import settings
 from src.common.logger import get_logger
 from src.common.schemas import Entity, RiskScore
 from src.common.utils import model_path, now_dt, risk_level_from_score
-from .features import build_features, ALL_FEATURES
+from .features import build_features
 from .train import MODEL_FILE
 
 log = get_logger("layer0.predict")

@@ -49,8 +49,10 @@ def _heuristic_fraud_scores(bundle: GraphBundle) -> np.ndarray:
         if 40_000_000 <= w <= 49_999_999:
             iu = bundle.node_index.get(u)
             iv = bundle.node_index.get(v)
-            if iu is not None: smurf_count[iu] += 1
-            if iv is not None: smurf_count[iv] += 1
+            if iu is not None:
+                smurf_count[iu] += 1
+            if iv is not None:
+                smurf_count[iv] += 1
     smurf_norm = smurf_count / (smurf_count.max() + 1e-9)
     scores += smurf_norm * 0.35
 

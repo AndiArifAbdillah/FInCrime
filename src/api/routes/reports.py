@@ -1,7 +1,6 @@
 """Layer 3 — Regtech / PPATK report endpoints."""
 from __future__ import annotations
 
-from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import HTMLResponse, FileResponse
@@ -11,7 +10,7 @@ from src.common.config import settings
 from src.layer3_regtech.report_generator import (
     LTKMPayload, build_ltkm_from_trace, build_ltkt_from_transactions,
 )
-from ..dependencies import get_report_generator, get_crypto_tracer, get_risk_scorer
+from ..dependencies import get_report_generator, get_crypto_tracer
 
 router = APIRouter()
 
@@ -54,14 +53,12 @@ def auto_ltkm_for_wallet(wallet_id: str,
 @router.post("/ltkm")
 def create_ltkm(req: LTKMRequest, gen=Depends(get_report_generator)):
     """Create an LTKM manually from compliance-officer-supplied data."""
-    from src.layer3_regtech.report_generator import LTKMPayload
-    from src.common.utils import make_id
-    from datetime import datetime
+    from src.common.utils import make_id, utc_now
     payload = LTKMPayload(
-        report_id=f"LTKM-{datetime.utcnow().strftime('%Y%m%d')}-{make_id('M')[:8]}",
+        report_id=f"LTKM-{utc_now().strftime('%Y%m%d')}-{make_id('M')[:8]}",
         institution_code=settings.ppatk_institution_code,
         institution_name="FinCrime Demo Bank",
-        report_date=datetime.utcnow().strftime("%Y-%m-%d"),
+        report_date=utc_now().strftime("%Y-%m-%d"),
         subject_name=req.subject_name,
         subject_id=req.subject_id,
         subject_type=req.subject_type,

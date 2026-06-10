@@ -124,7 +124,8 @@ def screen_dnfbp_transaction(tx: DNFBPTransaction,
                 score = max(score, 0.75)
             elif cash_pct >= 0.3:
                 rules.append(f"moderate_cash_payment_{int(cash_pct*100)}pct")
-                if severity_levels.get(sev, 0) < 2: sev = "medium"
+                if severity_levels.get(sev, 0) < 2:
+                    sev = "medium"
                 score = max(score, 0.55)
 
     # ----- Rule 4: crypto payment for DNFBP (new red flag per FATF 2023) -----
@@ -140,19 +141,22 @@ def screen_dnfbp_transaction(tx: DNFBPTransaction,
         score = 1.0
     elif customer_on_pep_list:
         rules.append("customer_is_pep")
-        if severity_levels.get(sev, 0) < 3: sev = "high"
+        if severity_levels.get(sev, 0) < 3:
+            sev = "high"
         score = max(score, 0.85)
 
     # ----- Rule 6: high-risk customer (Layer 0 risk score) -----
     if customer_risk_score >= 70:
         rules.append(f"high_customer_risk_{customer_risk_score:.0f}")
-        if severity_levels.get(sev, 0) < 3: sev = "high"
+        if severity_levels.get(sev, 0) < 3:
+            sev = "high"
         score = max(score, 0.65)
 
     # ----- Rule 7: foreign customer purchasing high-value asset -----
     if tx.customer_country not in ("ID", "") and tx.amount_idr >= threshold:
         rules.append(f"foreign_buyer_{tx.customer_country}")
-        if severity_levels.get(sev, 0) < 2: sev = "medium"
+        if severity_levels.get(sev, 0) < 2:
+            sev = "medium"
         score = max(score, 0.55)
 
     if not rules:

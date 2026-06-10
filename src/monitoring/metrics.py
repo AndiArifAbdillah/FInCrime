@@ -1,11 +1,11 @@
 """Prediction logging + layer health summaries."""
 from __future__ import annotations
 
-import json
 import sqlite3
 from contextlib import contextmanager
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import timedelta
+from src.common.utils import utc_now
 from pathlib import Path
 from typing import Optional
 
@@ -79,7 +79,7 @@ def compute_layer_health(layer: str, db_path: Optional[Path] = None,
         return LayerHealth(layer=layer, total_predictions=0,
                            alert_rate=0.0, avg_score=0.0, p95_score=0.0,
                            last_prediction_at="")
-    cutoff = (datetime.utcnow() - timedelta(hours=window_hours)).isoformat()
+    cutoff = (utc_now() - timedelta(hours=window_hours)).isoformat()
     conn = sqlite3.connect(db_path)
     try:
         rows = conn.execute(

@@ -20,7 +20,6 @@ from pathlib import Path
 import pandas as pd
 
 from src.common.config import settings
-from src.common.schemas import Transaction
 
 
 def main(input_csv: Path, out_csv: Path, top_n: int):
@@ -30,7 +29,7 @@ def main(input_csv: Path, out_csv: Path, top_n: int):
         sys.exit(1)
 
     from src.layer1_fraud_detection import FraudDetector
-    print(f"\n  Loading Layer 1 detector ...")
+    print("\n  Loading Layer 1 detector ...")
     det = FraudDetector()
 
     print(f"  Reading {input_csv} ...")

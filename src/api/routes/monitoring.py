@@ -6,7 +6,6 @@ from pathlib import Path
 import pandas as pd
 from fastapi import APIRouter, HTTPException, Query
 
-from src.common.config import settings
 from src.monitoring import (
     compute_feature_drift_report, compute_layer_health, PredictionLogger,
 )

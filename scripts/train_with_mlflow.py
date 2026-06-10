@@ -15,9 +15,7 @@ sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-import json
 import joblib
-from pathlib import Path
 
 from src.common.config import settings
 from src.common.logger import get_logger
@@ -110,8 +108,8 @@ def main():
     print("\n" + "=" * 70)
     print("  All runs logged to MLflow")
     print("=" * 70)
-    print(f"  View at:  http://localhost:5000  (run: mlflow ui)")
-    print(f"  Or:       .\\fc python -m mlflow ui --backend-store-uri file:./data/mlruns")
+    print("  View at:  http://localhost:5000  (run: mlflow ui)")
+    print("  Or:       .\\fc python -m mlflow ui --backend-store-uri file:./data/mlruns")
 
 
 if __name__ == "__main__":

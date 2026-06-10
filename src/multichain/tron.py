@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import os
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional
 
 import httpx
@@ -69,7 +69,8 @@ class TronConnector:
                 out.append(ChainTransaction(
                     chain="tron",
                     tx_hash=tx.get("txID", ""),
-                    timestamp=datetime.utcfromtimestamp(ts / 1000) if ts else None,
+                    timestamp=(datetime.fromtimestamp(ts / 1000, tz=timezone.utc)
+                               .replace(tzinfo=None)) if ts else None,
                     sender=sender,
                     receiver=receiver,
                     amount_native=amt_trx,

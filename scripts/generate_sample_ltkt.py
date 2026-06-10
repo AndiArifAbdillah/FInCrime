@@ -10,7 +10,8 @@ sys.path.insert(0, str(_Path(__file__).resolve().parent.parent))
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-from datetime import datetime, timedelta
+from datetime import timedelta
+from src.common.utils import utc_now
 from src.common.config import settings
 from src.layer3_regtech.report_generator import (
     build_ltkt_from_transactions, ReportGenerator,
@@ -19,7 +20,7 @@ from src.layer3_regtech.report_generator import (
 
 def main() -> None:
     # Demo customer with 4 cash transactions same business day, total ~ IDR 1.4 M
-    today = datetime.utcnow().replace(hour=9, minute=0, second=0, microsecond=0)
+    today = utc_now().replace(hour=9, minute=0, second=0, microsecond=0)
     transactions = [
         {
             "tx_id": "BCA_LTKT_001",

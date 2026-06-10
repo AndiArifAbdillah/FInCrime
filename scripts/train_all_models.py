@@ -46,7 +46,7 @@ def main(data_dir: Path, model_dir: Path) -> None:
     log.info("=" * 60)
     t0 = time.time()
     from src.layer1_fraud_detection.train import train as train_l1
-    m1 = train_l1(transactions, model_dir, ae_epochs=15)
+    train_l1(transactions, model_dir, ae_epochs=15)
     log.info("layer1.done", elapsed=f"{time.time()-t0:.1f}s")
 
     # ----- Layer 2 -----

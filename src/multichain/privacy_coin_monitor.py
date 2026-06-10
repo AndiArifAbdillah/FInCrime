@@ -106,7 +106,6 @@ def check_address_for_privacy_coin(
     Returns:
         PrivacyCoinFlag jika terindikasi, None jika bersih.
     """
-    address_l = address.lower()
     indicators: list[str] = []
     coins: set[str] = set()
     exchange_name = ""

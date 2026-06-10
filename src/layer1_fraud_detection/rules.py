@@ -1,7 +1,6 @@
 """Deterministic rule engine that complements the ML detectors."""
 from __future__ import annotations
 
-import pandas as pd
 
 from src.common.schemas import AlertType
 

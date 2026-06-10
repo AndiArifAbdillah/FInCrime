@@ -32,3 +32,8 @@ markers = [
 [tool.ruff]
 line-length = 100
 target-version = "py310"
+
+[tool.ruff.lint.per-file-ignores]
+# Standalone scripts must insert the repo root into sys.path before they can
+# import from src/, so module-level imports cannot all sit at the top.
+"scripts/*" = ["E402"]

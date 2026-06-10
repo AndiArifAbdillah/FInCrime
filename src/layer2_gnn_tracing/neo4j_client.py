@@ -5,7 +5,7 @@ from contextlib import contextmanager
 from typing import Iterable
 
 try:
-    from neo4j import GraphDatabase, Driver
+    from neo4j import GraphDatabase
     _NEO4J_AVAILABLE = True
 except ImportError:
     _NEO4J_AVAILABLE = False

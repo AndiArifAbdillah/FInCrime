@@ -13,12 +13,10 @@ For the Indonesian context, also relevant:
 from __future__ import annotations
 
 import csv
-import io
 import re
 from dataclasses import dataclass, field
-from datetime import datetime
+from src.common.utils import utc_now
 from pathlib import Path
-from typing import Optional
 
 import httpx
 
@@ -52,7 +50,7 @@ def download_ofac_sdn(force: bool = False, timeout: int = 30) -> Path:
     """Download OFAC SDN CSV (US Treasury). Cached for 24h."""
     cache = CACHE_DIR / "ofac_sdn.csv"
     if cache.exists() and not force:
-        age_h = (datetime.utcnow().timestamp() - cache.stat().st_mtime) / 3600
+        age_h = (utc_now().timestamp() - cache.stat().st_mtime) / 3600
         if age_h < 24:
             log.info("ofac.cache_hit", age_hours=round(age_h, 1))
             return cache
@@ -174,7 +172,6 @@ def flag_entities_against_sanctions(entities_df, name_column: str = "entity_id")
 
     Returns a new DataFrame with updated flags + a count of matches.
     """
-    import pandas as pd
     try:
         sanctioned = load_sanctioned_names()
         bad_wallets = get_seed_bad_wallets()

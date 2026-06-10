@@ -1,13 +1,13 @@
 """Skeleton bank-core connector. Replace `fetch_recent` with real API calls."""
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime
 from typing import Iterable
 
 import pandas as pd
 
 from src.common.logger import get_logger
-from src.common.schemas import Transaction, Channel
+from src.common.schemas import Transaction
 
 log = get_logger("connector.bank")
 

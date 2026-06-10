@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 import sqlite3
 from contextlib import contextmanager
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional
 
@@ -99,13 +99,17 @@ class AuditLog:
         conds: list[str] = []
         args: list[Any] = []
         if event_type:
-            conds.append("event_type = ?"); args.append(event_type)
+            conds.append("event_type = ?")
+            args.append(event_type)
         if subject:
-            conds.append("subject = ?"); args.append(subject)
+            conds.append("subject = ?")
+            args.append(subject)
         if actor:
-            conds.append("actor = ?"); args.append(actor)
+            conds.append("actor = ?")
+            args.append(actor)
         if since:
-            conds.append("timestamp >= ?"); args.append(since)
+            conds.append("timestamp >= ?")
+            args.append(since)
         where = "WHERE " + " AND ".join(conds) if conds else ""
         args.append(limit)
         with self._conn() as c:

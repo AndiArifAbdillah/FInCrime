@@ -22,9 +22,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 import argparse
-import math
 import random
-from datetime import datetime, timedelta
+from datetime import timedelta
+from src.common.utils import utc_now
 from pathlib import Path
 
 import numpy as np
@@ -44,7 +44,6 @@ CHAINS = ["eth", "btc", "bsc", "polygon"]
 def _gen_entities(n_individuals: int, n_corp: int, n_wallets: int,
                   fraud_rate: float = 0.05) -> pd.DataFrame:
     rows = []
-    now = datetime.utcnow()
 
     # Individuals
     for i in range(n_individuals):
@@ -127,7 +126,7 @@ def _gen_transactions(entities: pd.DataFrame, n_tx: int) -> pd.DataFrame:
     fraud_ids = set(entities[entities.is_fraud == 1].entity_id)
 
     rows = []
-    base_time = datetime.utcnow() - timedelta(days=30)
+    base_time = utc_now() - timedelta(days=30)
 
     for i in range(n_tx):
         # Sample sender — fraud entities oversampled to create signal
@@ -236,12 +235,12 @@ def main(out_dir: Path, n_individuals: int, n_corp: int,
     transactions.to_csv(out_dir / "transactions.csv", index=False)
     print(f"      -> {len(transactions):,} transactions written")
 
-    print(f"[3/4] Generating crypto wallet graph")
+    print("[3/4] Generating crypto wallet graph")
     edges = _gen_crypto_graph(entities)
     edges.to_csv(out_dir / "crypto_edges.csv", index=False)
     print(f"      -> {len(edges):,} edges written")
 
-    print(f"[4/4] Writing known-bad wallet labels for Layer 2 supervision")
+    print("[4/4] Writing known-bad wallet labels for Layer 2 supervision")
     bad = entities[(entities.entity_type == "wallet") & (entities.is_fraud == 1)][["entity_id"]]
     bad.columns = ["wallet_id"]
     bad["label"] = 1

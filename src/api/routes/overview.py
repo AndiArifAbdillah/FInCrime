@@ -2,16 +2,14 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta
-from pathlib import Path
 
 import pandas as pd
 from fastapi import APIRouter, HTTPException, Query, Depends
 
 from src.common.config import settings
 from src.common.utils import row_to_entity
-from src.common.schemas import Entity
 
-from ..dependencies import get_risk_scorer, get_fraud_detector, get_crypto_tracer
+from ..dependencies import get_risk_scorer, get_fraud_detector
 
 router = APIRouter()
 

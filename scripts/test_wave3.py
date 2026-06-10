@@ -43,11 +43,11 @@ c.get("/v1/screening/dttot/list?limit=1")
 
 r = c.get("/metrics")
 print(f"[OK] GET  /metrics             -> {r.status_code}  ({len(r.text):,} bytes)")
-sample_lines = [l for l in r.text.split("\n")
-                if l.startswith("fincrime_") and not l.startswith("#")][:6]
+sample_lines = [line for line in r.text.split("\n")
+                if line.startswith("fincrime_") and not line.startswith("#")][:6]
 print("     Sample exported metrics:")
-for l in sample_lines:
-    print(f"       {l[:100]}")
+for line in sample_lines:
+    print(f"       {line[:100]}")
 
 # ---------- MLflow tracker ----------
 print()
@@ -66,10 +66,10 @@ print("=" * 70)
 print("OVERALL SYSTEM CAPABILITIES")
 print("=" * 70)
 print(f"  API routes:       {len(app.routes)}")
-print(f"  Sidebar tabs:     11")
-print(f"  Real data sources: 10+ (OFAC, UN, Etherscan, Blockstream, BscScan, ...)")
+print("  Sidebar tabs:     11")
+print("  Real data sources: 10+ (OFAC, UN, Etherscan, Blockstream, BscScan, ...)")
 print(f"  Audit events:     {r.json() if False else d['total']}")
-print(f"  Compliance: POJK No.12/2024, UU PDP No.27/2022, FATF 10-25")
+print("  Compliance: POJK No.12/2024, UU PDP No.27/2022, FATF 10-25")
 print()
 print("=" * 70)
 print("Wave 3 smoke test complete")

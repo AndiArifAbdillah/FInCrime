@@ -15,10 +15,7 @@ from __future__ import annotations
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
-from datetime import datetime
-from pathlib import Path
 from typing import Optional
-from urllib.parse import urlparse
 
 import httpx
 

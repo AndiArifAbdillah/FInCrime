@@ -24,7 +24,7 @@ import pandas as pd
 
 from src.common.config import settings
 from src.common.logger import get_logger
-from src.ingestion.csv_bank_importer import import_csv, detect_format, PARSERS
+from src.ingestion.csv_bank_importer import import_csv, PARSERS
 
 log = get_logger("import_bank_csv")
 
@@ -85,9 +85,9 @@ def main(files: list[str], bank: str | None, account_id: str, out_dir: Path):
                   (df["amount_idr"] <= 49_999_999)).sum()
     print(f"    Tx >= IDR 500M (LTKT trigger):       {above_ltkt}")
     print(f"    Tx in smurfing band 40M-49.9M:       {near_smurf}")
-    print(f"\n[OK] Import complete.")
-    print(f"\n  Next step (score for fraud):")
-    print(f"    python scripts\\score_real_data.py")
+    print("\n[OK] Import complete.")
+    print("\n  Next step (score for fraud):")
+    print("    python scripts\\score_real_data.py")
 
 
 if __name__ == "__main__":

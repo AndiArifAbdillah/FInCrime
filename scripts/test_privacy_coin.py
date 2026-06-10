@@ -14,7 +14,7 @@ print("=" * 70)
 
 from src.multichain.privacy_coin_monitor import (
     check_address_for_privacy_coin, privacy_coin_info,
-    coverage_matrix, is_privacy_coin_exchange,
+    coverage_matrix,
 )
 
 # Fake ChainTransaction

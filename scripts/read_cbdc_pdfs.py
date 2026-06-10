@@ -57,7 +57,7 @@ def extract_relevant(name: str, path: Path, max_pages: int = 40):
         print("  (tidak ada AML/compliance keyword di first 40 pages)")
         return
 
-    print(f"\n  Pages with AML/compliance keywords:")
+    print("\n  Pages with AML/compliance keywords:")
     for page_num, matched, text in hits[:8]:
         print(f"\n  --- PAGE {page_num} ---")
         print(f"  Matched: {', '.join(sorted(set(matched))[:10])}")

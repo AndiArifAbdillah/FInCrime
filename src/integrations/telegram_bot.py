@@ -28,7 +28,6 @@ import urllib.parse
 import urllib.request
 from typing import Any, Optional
 
-from src.common.config import settings
 from src.common.logger import get_logger
 
 log = get_logger("integrations.telegram")
@@ -138,7 +137,8 @@ def handle_command(text: str) -> str:
 
     if text.startswith("/trace"):
         arg = text.removeprefix("/trace").strip()
-        if not arg: return "Cara pakai: `/trace <wallet_id>`\nContoh: `/trace WALLET_0x000000000002`"
+        if not arg:
+            return "Cara pakai: `/trace <wallet_id>`\nContoh: `/trace WALLET_0x000000000002`"
         t = _api_get(f"/v1/tracing/wallet/{urllib.parse.quote(arg)}/trace?hops=2")
         s = _api_get(f"/v1/tracing/wallet/{urllib.parse.quote(arg)}/score")
         if not t or not s:
@@ -173,9 +173,11 @@ def handle_command(text: str) -> str:
 
     if text.startswith("/risk"):
         arg = text.removeprefix("/risk").strip()
-        if not arg: return "Cara pakai: `/risk <entity_id>`\nContoh: `/risk IND_000001`"
+        if not arg:
+            return "Cara pakai: `/risk <entity_id>`\nContoh: `/risk IND_000001`"
         r = _api_get(f"/v1/entities/{urllib.parse.quote(arg)}/shap")
-        if not r: return "Pengecekan risiko gagal — pastikan server aktif."
+        if not r:
+            return "Pengecekan risiko gagal — pastikan server aktif."
 
         from src.common.explain import explain_risk_score, humanize_shap_factor
         score = float(r.get("score", 0))
@@ -200,7 +202,8 @@ def handle_command(text: str) -> str:
 
     if text.startswith("/screen"):
         name = text.removeprefix("/screen").strip()
-        if not name: return "Cara pakai: `/screen <nama>`\nContoh: `/screen Jamaah Islamiyah`"
+        if not name:
+            return "Cara pakai: `/screen <nama>`\nContoh: `/screen Jamaah Islamiyah`"
         d = _api_get(f"/v1/screening/dttot/{urllib.parse.quote(name)}")
         n = _api_get(f"/v1/screening/news/{urllib.parse.quote(name)}?limit=3")
 
@@ -234,9 +237,11 @@ def handle_command(text: str) -> str:
 
     if text.startswith("/case"):
         arg = text.removeprefix("/case").strip()
-        if not arg: return "Cara pakai: `/case <case_id>`"
+        if not arg:
+            return "Cara pakai: `/case <case_id>`"
         c = _api_get(f"/v1/cases/{urllib.parse.quote(arg)}")
-        if not c: return f"Kasus `{arg}` tidak ditemukan."
+        if not c:
+            return f"Kasus `{arg}` tidak ditemukan."
         status_emoji = {
             "open": "🆕", "in_review": "🔍", "escalated": "🔴",
             "reported": "📤", "closed": "✅",
@@ -255,7 +260,8 @@ def handle_command(text: str) -> str:
 
     if text.startswith("/alerts"):
         r = _api_get("/v1/fraud/recent-alerts?limit=5")
-        if not r: return "Gagal mengambil alert — pastikan server aktif."
+        if not r:
+            return "Gagal mengambil alert — pastikan server aktif."
         from src.common.explain import explain_fraud_score
         total = r.get("total_scored", 0)
         anom = r.get("anomaly_count", 0)

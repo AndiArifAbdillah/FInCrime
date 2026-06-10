@@ -28,6 +28,7 @@ from __future__ import annotations
 import os
 from dataclasses import dataclass, field
 from datetime import datetime
+from src.common.utils import utc_now
 from enum import Enum
 from typing import Optional
 
@@ -250,7 +251,7 @@ def demo_garuda_event() -> GarudaDLTEvent:
     """Return a sample Garuda DLT event for testing."""
     return GarudaDLTEvent(
         event_id="0xGARUDA-DEMO-001",
-        timestamp=datetime.utcnow(),
+        timestamp=utc_now(),
         tier=GarudaTier.WHOLESALE.value,
         tx_type=GarudaTxType.TRANSFER.value,
         sender_participant_id="BANK-MANDIRI-001",
@@ -284,7 +285,7 @@ if __name__ == "__main__":
 
     # Convert to FinCrime Transaction
     tx = dlt_event_to_transaction(event)
-    print(f"-> FinCrime Transaction:")
+    print("-> FinCrime Transaction:")
     print(f"   tx_id={tx.tx_id}")
     print(f"   amount={tx.amount_idr:,.0f}, channel={tx.channel}")
     print()

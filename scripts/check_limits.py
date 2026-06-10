@@ -1,5 +1,6 @@
 """Check JAWABAN_FORM word counts against OFFICIAL guidebook limits."""
-import re, sys
+import re
+import sys
 from pathlib import Path
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")

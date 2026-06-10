@@ -2,8 +2,7 @@
 from __future__ import annotations
 
 import time
-from datetime import datetime
-from typing import Optional
+from datetime import datetime, timezone
 
 import httpx
 
@@ -73,7 +72,8 @@ class BitcoinConnector:
             value_btc = value_sats / 1e8
             ts = None
             if tx.get("status", {}).get("block_time"):
-                ts = datetime.utcfromtimestamp(int(tx["status"]["block_time"]))
+                ts = datetime.fromtimestamp(int(tx["status"]["block_time"]),
+                                            tz=timezone.utc).replace(tzinfo=None)
 
             out.append(ChainTransaction(
                 chain="btc",

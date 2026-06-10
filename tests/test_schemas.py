@@ -1,5 +1,6 @@
 """Shared schema sanity tests."""
 from datetime import datetime
+from src.common.utils import utc_now
 
 from src.common.schemas import Entity, Transaction, RiskLevel, Channel
 
@@ -14,7 +15,7 @@ def test_entity_defaults():
 def test_transaction_amount_validation():
     tx = Transaction(
         tx_id="t1", channel=Channel.BANK,
-        timestamp=datetime.utcnow(),
+        timestamp=utc_now(),
         sender_id="A", receiver_id="B",
         amount_idr=100_000,
     )

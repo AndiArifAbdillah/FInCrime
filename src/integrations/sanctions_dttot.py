@@ -12,10 +12,9 @@ For production: institutions with PPATK MoU get direct API access via SIPESAT.
 """
 from __future__ import annotations
 
-import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
-from datetime import datetime
+from src.common.utils import utc_now
 from pathlib import Path
 from typing import Optional
 
@@ -50,7 +49,7 @@ class DTTOTEntry:
 def download_un_list(force: bool = False, timeout: int = 30) -> Path:
     cache = CACHE_DIR / "un_consolidated.xml"
     if cache.exists() and not force:
-        age_h = (datetime.utcnow().timestamp() - cache.stat().st_mtime) / 3600
+        age_h = (utc_now().timestamp() - cache.stat().st_mtime) / 3600
         if age_h < 24:
             log.info("dttot.cache_hit", age_hours=round(age_h, 1))
             return cache
@@ -82,10 +81,12 @@ def parse_un_list(xml_path: Path) -> list[DTTOTEntry]:
         full_name_parts = []
         for k in ("FIRST_NAME", "SECOND_NAME", "THIRD_NAME", "FOURTH_NAME"):
             v = ind.findtext(k)
-            if v: full_name_parts.append(v.strip())
+            if v:
+                full_name_parts.append(v.strip())
         if not full_name_parts:
             v = ind.findtext("NAME") or ind.findtext("FIRST_NAME")
-            if v: full_name_parts.append(v.strip())
+            if v:
+                full_name_parts.append(v.strip())
         name = " ".join(full_name_parts).strip()
         if not name:
             continue
@@ -93,7 +94,8 @@ def parse_un_list(xml_path: Path) -> list[DTTOTEntry]:
         for alias in ind.iter():
             if alias.tag.upper().endswith("ALIAS"):
                 an = alias.findtext("ALIAS_NAME") or ""
-                if an.strip(): aliases.append(an.strip())
+                if an.strip():
+                    aliases.append(an.strip())
         nat = ind.findtext("NATIONALITY/VALUE") or ""
         prog = ind.findtext("UN_LIST_TYPE") or "UN_CONSOLIDATED"
         out.append(DTTOTEntry(
@@ -168,7 +170,6 @@ def screen_name(name: str, index: Optional[dict] = None) -> Optional[DTTOTEntry]
 
 def screen_entities_df(df, name_column: str = "entity_id", index: Optional[dict] = None):
     """Apply DTTOT screening to a pandas DataFrame, return df + match stats."""
-    import pandas as pd
     idx = index or screening_index()
     df = df.copy()
     df["dttot_match"] = False

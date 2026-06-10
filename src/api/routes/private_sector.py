@@ -1,7 +1,6 @@
 """Private Sector AML endpoints (DNFBP, Property, HVA, UBO, Shell company)."""
 from __future__ import annotations
 
-from datetime import datetime
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel

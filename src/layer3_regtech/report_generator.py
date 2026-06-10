@@ -4,6 +4,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
+from src.common.utils import utc_now
 from pathlib import Path
 from typing import Optional
 
@@ -227,10 +228,10 @@ def build_ltkm_from_trace(*, subject_id: str, subject_name: str,
             log.warning("ltkm.llm_failed", error=str(e))
 
     return LTKMPayload(
-        report_id=f"LTKM-{datetime.utcnow().strftime('%Y%m%d')}-{make_id('R')[:8]}",
+        report_id=f"LTKM-{utc_now().strftime('%Y%m%d')}-{make_id('R')[:8]}",
         institution_code=settings.ppatk_institution_code,
         institution_name="FinCrime Demo Bank",
-        report_date=datetime.utcnow().strftime("%Y-%m-%d"),
+        report_date=utc_now().strftime("%Y-%m-%d"),
         subject_name=subject_name,
         subject_id=subject_id,
         subject_type=subject_type,
@@ -253,10 +254,10 @@ def build_ltkt_from_transactions(*, customer_id: str, customer_name: str,
     if total < THRESHOLD:
         return None
     return LTKTPayload(
-        report_id=f"LTKT-{datetime.utcnow().strftime('%Y%m%d')}-{make_id('R')[:8]}",
+        report_id=f"LTKT-{utc_now().strftime('%Y%m%d')}-{make_id('R')[:8]}",
         institution_code=settings.ppatk_institution_code,
         institution_name="FinCrime Demo Bank",
-        report_date=datetime.utcnow().strftime("%Y-%m-%d"),
+        report_date=utc_now().strftime("%Y-%m-%d"),
         customer_name=customer_name,
         customer_id=customer_id,
         customer_type=customer_type,

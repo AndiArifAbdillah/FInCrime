@@ -13,14 +13,12 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 import argparse
-import json
-from pathlib import Path
 
 import pandas as pd
 
 from src.common.config import settings
 from src.common.logger import get_logger
-from src.common.schemas import Entity, Transaction, Channel
+from src.common.schemas import Entity
 from src.layer3_regtech.report_generator import build_ltkm_from_trace, ReportGenerator
 
 log = get_logger("pipeline")
@@ -155,7 +153,7 @@ def main(seed_wallet: str | None = None):
         print(f"    • {ind}")
 
     banner("PIPELINE COMPLETE")
-    print(f"  Total time-to-LTKM: < 5 minutes (target met)")
+    print("  Total time-to-LTKM: < 5 minutes (target met)")
     print(f"  Open in browser: file:///{paths['html']}")
 
 

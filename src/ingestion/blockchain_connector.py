@@ -6,16 +6,14 @@ Get a key here: https://etherscan.io/myapikey
 from __future__ import annotations
 
 import time
-from datetime import datetime
-from pathlib import Path
-from typing import Iterable, Optional
+from datetime import datetime, timezone
+from typing import Optional
 
 import httpx
 
 from src.common.config import settings
 from src.common.logger import get_logger
 from src.common.schemas import Transaction, Channel
-from src.common.utils import make_id
 
 log = get_logger("connector.blockchain")
 
@@ -128,7 +126,8 @@ class BlockchainConnector:
                 out.append(Transaction(
                     tx_id=t["hash"],
                     channel=Channel.CRYPTO,
-                    timestamp=datetime.utcfromtimestamp(int(t["timeStamp"])),
+                    timestamp=datetime.fromtimestamp(int(t["timeStamp"]),
+                                                     tz=timezone.utc).replace(tzinfo=None),
                     sender_id=f"WALLET_{t['from'].lower()}",
                     receiver_id=f"WALLET_{t['to'].lower()}",
                     amount_idr=round(eth_amt * rate, 2),
@@ -176,7 +175,8 @@ class BlockchainConnector:
                 out.append(Transaction(
                     tx_id=t["hash"] + "_" + str(t.get("transactionIndex", "0")),
                     channel=Channel.CRYPTO,
-                    timestamp=datetime.utcfromtimestamp(int(t["timeStamp"])),
+                    timestamp=datetime.fromtimestamp(int(t["timeStamp"]),
+                                                     tz=timezone.utc).replace(tzinfo=None),
                     sender_id=f"WALLET_{t['from'].lower()}",
                     receiver_id=f"WALLET_{t['to'].lower()}",
                     amount_idr=round(idr, 2),

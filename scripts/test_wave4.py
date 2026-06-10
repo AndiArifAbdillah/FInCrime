@@ -22,7 +22,8 @@ r = c.get("/metrics")
 print(f"[OK] GET /metrics                     -> {r.status_code} ({len(r.content)} bytes)")
 sample = r.text.split("\n")[:5]
 for line in sample:
-    if line.strip(): print(f"     | {line}")
+    if line.strip():
+        print(f"     | {line}")
 
 # Audit log
 r = c.post("/v1/audit/seed-demo")

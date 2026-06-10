@@ -4,7 +4,7 @@ from __future__ import annotations
 import hashlib
 import math
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -55,12 +55,17 @@ def row_to_entity(row: dict | Any) -> Entity | None:
         return None
 
 
+def utc_now() -> datetime:
+    """Naive UTC now — drop-in replacement for the deprecated datetime.utcnow()."""
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
 def now_iso() -> str:
-    return datetime.utcnow().isoformat()
+    return utc_now().isoformat()
 
 
 def now_dt() -> datetime:
-    return datetime.utcnow()
+    return utc_now()
 
 
 def make_id(prefix: str = "tx") -> str:

@@ -6,11 +6,10 @@ reported → closed.
 """
 from __future__ import annotations
 
-import json
 import sqlite3
 from contextlib import contextmanager
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
+from dataclasses import dataclass, field
+from src.common.utils import utc_now
 from enum import Enum
 from pathlib import Path
 from typing import Optional
@@ -126,7 +125,7 @@ class CaseStore:
     def create(self, *, title: str, subject_id: str,
                subject_type: str = "wallet", assignee: str = "unassigned",
                description: str = "") -> Case:
-        case_id = f"CASE-{datetime.utcnow().strftime('%Y%m%d')}-{make_id('C')[:8].upper()}"
+        case_id = f"CASE-{utc_now().strftime('%Y%m%d')}-{make_id('C')[:8].upper()}"
         ts = now_iso()
         with self._conn() as c:
             c.execute(

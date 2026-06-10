@@ -5,14 +5,12 @@ Run:
 """
 from __future__ import annotations
 
-from datetime import datetime
-from pathlib import Path
 
 import pandas as pd
 import streamlit as st
 
 from src.common.config import settings
-from src.common.schemas import Entity, Transaction, Channel
+from src.common.schemas import Entity
 
 # ---------- Page config ----------
 st.set_page_config(

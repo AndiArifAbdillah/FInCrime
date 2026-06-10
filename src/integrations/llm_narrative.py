@@ -12,7 +12,6 @@ from __future__ import annotations
 import os
 from typing import Optional
 
-from src.common.config import settings
 from src.common.logger import get_logger
 
 log = get_logger("integrations.llm")

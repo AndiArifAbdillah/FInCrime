@@ -41,7 +41,7 @@ def main(force: bool, entities_csv: Path):
     by_program: dict[str, int] = {}
     for e in entities:
         by_program[e.program] = by_program.get(e.program, 0) + 1
-    print(f"\n  Top 10 programs:")
+    print("\n  Top 10 programs:")
     for prog, n in sorted(by_program.items(), key=lambda x: -x[1])[:10]:
         print(f"    {prog:<30} {n:>6,}")
 
@@ -50,7 +50,7 @@ def main(force: bool, entities_csv: Path):
     print("=" * 60)
     addrs = load_sanctioned_crypto_addresses()
     print(f"  Distinct addresses: {len(addrs):,}")
-    print(f"  Sample (first 5):")
+    print("  Sample (first 5):")
     for a in list(addrs)[:5]:
         print(f"    {a}")
 

@@ -25,7 +25,7 @@ def train(edges_csv: Path, entities_csv: Path,
           lr: float = 0.01) -> dict:
     import torch
     import torch.nn.functional as F
-    from sklearn.metrics import roc_auc_score, average_precision_score, f1_score
+    from sklearn.metrics import roc_auc_score, average_precision_score
     from .graphsage_model import GraphSAGE
 
     model_dir = model_dir or ensure_model_dir()

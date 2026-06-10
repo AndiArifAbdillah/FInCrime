@@ -48,7 +48,7 @@ def update_env_file(key: str) -> Path:
     if not ENV_FILE.exists():
         if ENV_EXAMPLE.exists():
             ENV_FILE.write_text(ENV_EXAMPLE.read_text(encoding="utf-8"), encoding="utf-8")
-            print(f"  ✓ .env dibuat dari .env.example")
+            print("  ✓ .env dibuat dari .env.example")
         else:
             ENV_FILE.write_text("", encoding="utf-8")
 
@@ -86,7 +86,7 @@ def verify_key(key: str) -> bool:
         return False
     except Exception as e:
         print(f"  ⚠ Network error: {e}")
-        print(f"     (Key tetap disimpan, coba lagi nanti)")
+        print("     (Key tetap disimpan, coba lagi nanti)")
         return False
 
 
@@ -115,7 +115,7 @@ def main():
     print(f"\n  ✓ Key disimpan di {env_path}")
 
     if verify_key(key):
-        print(f"\n  ✓ Key VALID — Etherscan terhubung")
+        print("\n  ✓ Key VALID — Etherscan terhubung")
         print()
         print("=" * 70)
         print("  ✅ SETUP BERHASIL!")

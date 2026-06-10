@@ -13,6 +13,7 @@ fairly often. We auto-detect via fuzzy header match and fall back to GENERIC.
 from __future__ import annotations
 
 from datetime import datetime
+from src.common.utils import utc_now
 from pathlib import Path
 from typing import Callable, Optional
 
@@ -54,7 +55,7 @@ def _parse_amount(value) -> float:
 
 def _parse_date(value, formats: list[str]) -> datetime:
     if pd.isna(value):
-        return datetime.utcnow()
+        return utc_now()
     s = str(value).strip()
     for fmt in formats:
         try:
@@ -64,7 +65,7 @@ def _parse_date(value, formats: list[str]) -> datetime:
     try:
         return pd.to_datetime(s).to_pydatetime()
     except Exception:
-        return datetime.utcnow()
+        return utc_now()
 
 
 # ----- BCA KlikBCA -----

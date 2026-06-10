@@ -21,7 +21,6 @@ from typing import Optional
 import pandas as pd
 
 from src.common.logger import get_logger
-from .dnfbp import DNFBPTransaction, screen_dnfbp_transaction
 
 log = get_logger("private.property")
 
@@ -77,7 +76,7 @@ class PropertyMonitor:
             alerts.append({
                 "rule": "pmk_55_mandatory",
                 "severity": "high",
-                "message": f"Wajib lapor PMK No.55/2017 (>= IDR 1M)",
+                "message": "Wajib lapor PMK No.55/2017 (>= IDR 1M)",
             })
 
         # ---- Rule: under-/over-valuation vs appraisal ----

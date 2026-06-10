@@ -79,13 +79,13 @@ print("=" * 70)
 # Seed + health + drift
 c.post("/v1/monitoring/seed-demo?n=300")
 r = c.get("/v1/monitoring/health")
-for l in r.json()['layers']:
-    print(f"[OK] Layer health {l['layer']:>7}  predictions={l['total_predictions']:>4}  alert_rate={l['alert_rate']:.2%}")
+for layer in r.json()['layers']:
+    print(f"[OK] Layer health {layer['layer']:>7}  predictions={layer['total_predictions']:>4}  alert_rate={layer['alert_rate']:.2%}")
 
 r = c.get("/v1/monitoring/drift")
 d = r.json()
 print(f"[OK] Drift report — overall PSI: {d['overall_psi']}  ({d['overall_severity']})")
-print(f"     Top 3 drifted features:")
+print("     Top 3 drifted features:")
 for f in d['feature_drifts'][:3]:
     print(f"     - {f['feature']:<28}  PSI={f['psi']:.4f}  KS={f['ks_stat']:.4f}  [{f['severity']}]")
 

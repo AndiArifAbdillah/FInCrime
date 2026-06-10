@@ -6,8 +6,7 @@ is broadcast. Use `broadcast_alert(...)` from anywhere in the codebase to push.
 from __future__ import annotations
 
 import asyncio
-import json
-from datetime import datetime
+from src.common.utils import utc_now
 from typing import Optional
 
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
@@ -29,7 +28,7 @@ class ConnectionManager:
         log.info("ws.connected", clients=len(self.connections))
         await ws.send_json({
             "type": "welcome",
-            "ts": datetime.utcnow().isoformat(),
+            "ts": utc_now().isoformat(),
             "message": "Connected to FinCrime alert stream",
         })
 
@@ -65,7 +64,7 @@ async def ws_alerts(ws: WebSocket):
                     await ws.send_json({"type": "pong"})
             except asyncio.TimeoutError:
                 await ws.send_json({"type": "heartbeat",
-                                    "ts": datetime.utcnow().isoformat()})
+                                    "ts": utc_now().isoformat()})
     except WebSocketDisconnect:
         manager.disconnect(ws)
 
@@ -76,7 +75,7 @@ async def broadcast_alert(*, severity: str, title: str, subtitle: str,
     """Broadcast a new alert to all connected websocket clients."""
     payload = {
         "type": "alert",
-        "ts": datetime.utcnow().isoformat(),
+        "ts": utc_now().isoformat(),
         "severity": severity,
         "title": title,
         "subtitle": subtitle,
@@ -92,7 +91,7 @@ async def test_broadcast(severity: str = "high", title: str = "Test alert"):
     """Trigger a test broadcast (for verifying client subscription)."""
     await broadcast_alert(
         severity=severity, title=title,
-        subtitle=f"Manual test from API at {datetime.utcnow().isoformat()}",
+        subtitle=f"Manual test from API at {utc_now().isoformat()}",
         source="manual_test",
     )
     return {"ok": True, "subscribers": len(manager.connections)}
