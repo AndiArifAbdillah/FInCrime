@@ -94,7 +94,7 @@ class CryptoTracer:
             if not path.exists():
                 raise FileNotFoundError(f"GNN weights missing at {path}")
             data, _ = build_pyg_graph(edges_csv, entities_csv)
-            blob = torch.load(path, map_location="cpu", weights_only=False)
+            blob = torch.load(path, map_location="cpu", weights_only=True)
             model = GraphSAGE(blob["in_dim"], hidden_dim=blob["hidden_dim"])
             model.load_state_dict(blob["state_dict"])
             model.eval()

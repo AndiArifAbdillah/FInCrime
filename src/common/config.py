@@ -39,7 +39,9 @@ class Settings(BaseSettings):
     kafka_topic_alerts: str = Field(default="fincrime.alerts")
 
     # --- API ---
-    api_host: str = Field(default="0.0.0.0")
+    # Secure default: bind loopback only. Docker/production overrides via
+    # API_HOST=0.0.0.0 (docker/Dockerfile.api already passes --host explicitly).
+    api_host: str = Field(default="127.0.0.1")
     api_port: int = Field(default=8000)
     api_secret_key: str = Field(default="change-me")
     api_cors_origins: str = Field(default="http://localhost:8501")

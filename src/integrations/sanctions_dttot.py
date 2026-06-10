@@ -12,7 +12,7 @@ For production: institutions with PPATK MoU get direct API access via SIPESAT.
 """
 from __future__ import annotations
 
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET  # safe parser: downloaded XML is untrusted input
 from dataclasses import dataclass, field
 from src.common.utils import utc_now
 from pathlib import Path

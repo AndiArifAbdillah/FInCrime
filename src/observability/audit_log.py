@@ -114,8 +114,10 @@ class AuditLog:
         args.append(limit)
         with self._conn() as c:
             c.row_factory = sqlite3.Row
+            # `where` is assembled from fixed "col = ?" fragments only; all
+            # user values are bound via ?-parameters below.
             rows = c.execute(
-                f"SELECT * FROM audit_events {where} ORDER BY timestamp DESC LIMIT ?",
+                f"SELECT * FROM audit_events {where} ORDER BY timestamp DESC LIMIT ?",  # nosec B608
                 args,
             ).fetchall()
         out = []

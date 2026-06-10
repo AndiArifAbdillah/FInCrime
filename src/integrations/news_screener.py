@@ -13,7 +13,7 @@ Sources:
 from __future__ import annotations
 
 import re
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET  # safe parser: RSS feeds are untrusted input
 from dataclasses import dataclass
 from typing import Optional
 

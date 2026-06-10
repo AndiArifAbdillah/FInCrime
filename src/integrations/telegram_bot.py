@@ -16,17 +16,17 @@ Setup:
        TELEGRAM_ALLOWED_USERS=12345678,87654321  (comma-separated user IDs)
     4. Run:  .\fc python -m src.integrations.telegram_bot
 
-Uses pure-stdlib long polling (no external lib required). Set
+Uses simple httpx long polling (no telegram SDK required). Set
 FINCRIME_API_URL if the bot runs separately from the API.
 """
 from __future__ import annotations
 
-import json
 import os
 import time
 import urllib.parse
-import urllib.request
 from typing import Any, Optional
+
+import httpx
 
 from src.common.logger import get_logger
 
@@ -34,7 +34,7 @@ log = get_logger("integrations.telegram")
 
 
 # ============================================================
-# Telegram API client (urllib-only, no httpx required)
+# Telegram API client (httpx long polling)
 # ============================================================
 class TelegramClient:
     def __init__(self, token: str):
@@ -44,11 +44,9 @@ class TelegramClient:
     def _req(self, method: str, params: dict | None = None,
              timeout: int = 60) -> dict:
         url = f"{self.base}/{method}"
-        data = urllib.parse.urlencode(params or {}).encode()
         try:
-            req = urllib.request.Request(url, data=data)
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                return json.loads(r.read().decode())
+            r = httpx.post(url, data=params or {}, timeout=timeout)
+            return r.json()
         except Exception as e:
             log.warning("telegram.request_failed", method=method, error=str(e))
             return {"ok": False, "error": str(e)}
@@ -77,8 +75,7 @@ class TelegramClient:
 def _api_get(path: str) -> dict | None:
     url = os.environ.get("FINCRIME_API_URL", "http://localhost:8000").rstrip("/") + path
     try:
-        with urllib.request.urlopen(url, timeout=30) as r:
-            return json.loads(r.read().decode())
+        return httpx.get(url, timeout=30).json()
     except Exception as e:
         log.warning("api.get_failed", url=url, error=str(e))
         return None
@@ -87,11 +84,7 @@ def _api_get(path: str) -> dict | None:
 def _api_post(path: str, body: dict | None = None) -> dict | None:
     url = os.environ.get("FINCRIME_API_URL", "http://localhost:8000").rstrip("/") + path
     try:
-        data = json.dumps(body or {}).encode()
-        req = urllib.request.Request(url, data=data,
-                                     headers={"Content-Type": "application/json"})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            return json.loads(r.read().decode())
+        return httpx.post(url, json=body or {}, timeout=30).json()
     except Exception as e:
         log.warning("api.post_failed", url=url, error=str(e))
         return None

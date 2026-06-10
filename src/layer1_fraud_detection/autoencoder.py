@@ -90,7 +90,7 @@ if _TORCH_AVAILABLE:
 
 
     def load_autoencoder(path: Path):
-        blob = torch.load(path, map_location="cpu", weights_only=False)
+        blob = torch.load(path, map_location="cpu", weights_only=True)
         model = TabularAutoencoder(blob["n_features"])
         model.load_state_dict(blob["state_dict"])
         model.eval()
